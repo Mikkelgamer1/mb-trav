@@ -326,7 +326,7 @@ function layout({ sti, titel, beskrivelse, indhold, o, klasse = '', noindex = fa
 <title>${esc(titel)}</title>
 <meta name="description" content="${esc(beskrivelse)}">
 ${noindex ? '<meta name="robots" content="noindex">' : '<link rel="canonical" href="' + kanonisk + '">'}
-<meta name="theme-color" content="#f1ebe0">
+<meta name="theme-color" content="#0b111c">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="da_DK">
 <meta property="og:site_name" content="${SITE.navn}">
@@ -341,6 +341,7 @@ ${noindex ? '<meta name="robots" content="noindex">' : '<link rel="canonical" hr
 <link rel="icon" type="image/png" sizes="48x48" href="${R}assets/img/ikon-48.png">
 <link rel="apple-touch-icon" href="${R}assets/img/ikon-180.png">
 <link rel="preload" href="${R}assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="${R}assets/fonts/newsreader.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${R}assets/css/site.css?v=${V}">
 <script>document.documentElement.classList.add('js');setTimeout(function(){window.__klar||document.documentElement.classList.remove('js')},2500)</script>
 <script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@graph': graf }).replace(/</g, '\\u003c')}</script>
