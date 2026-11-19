@@ -56,6 +56,9 @@ const flet = (nye, gamle = []) => {
   return [...nye, ...gamle.filter((r) => !set.has(r.id))].sort((a, b) => b.dato.localeCompare(a.dato) || b.loeb - a.loeb);
 };
 
+/** Opdrætter i registret som "TeamBakkelygaard & MBTrav(M.B.Nielsen)" → staldens eget opdræt. */
+const erEgetOpdraet = (opdraetter) => /MB ?Trav/i.test(opdraetter ?? '');
+
 const tilStatistik = (svar) => svar.statistics.map((s) => ({
   aar: Number(s.year), starter: s.numberOfStarts, sejre: s.firstPlaces, toer: s.secondPlaces, treer: s.thirdPlaces,
   procent: tal(s.winningRates), praemier: tal(s.prizeMoney),
@@ -82,14 +85,14 @@ async function hentTravinfo(gammel) {
   for (const h of traeningsliste) {
     const id = h.horse.id;
     let fast = kendte.get(id); // navn, fødsel og afstamning ændrer sig ikke – hentes kun første gang
-    if (!fast?.far) {
+    if (!fast?.far || fast.egetOpdraet === undefined) {
       const info = await get(`/horses/${id}/basicinformation`);
       const stamtavle = await get(`/horses/${id}/pedigree?pedigreeTree=SMALL`);
-      fast = { navn: info.name.replace('*', '').trim(), foedt: info.dateOfBirth, far: paentNavn(stamtavle.father?.name), mor: paentNavn(stamtavle.mother?.name) };
+      fast = { navn: info.name.replace('*', '').trim(), foedt: info.dateOfBirth, far: paentNavn(stamtavle.father?.name), mor: paentNavn(stamtavle.mother?.name), egetOpdraet: erEgetOpdraet(info.breederName) };
     }
     const livs = (await get(`/horses/${id}/statistics`)).statistics?.find((s) => s.year === 'Livs');
     heste.push({
-      id, navn: fast.navn, alder: Number(h.age), koen: h.gender.text, foedt: fast.foedt, far: fast.far, mor: fast.mor,
+      id, navn: fast.navn, alder: Number(h.age), koen: h.gender.text, foedt: fast.foedt, far: fast.far, mor: fast.mor, egetOpdraet: fast.egetOpdraet,
       starter: tal(livs?.numberOfStarts), placeringer: livs?.placements ?? '0-0-0', praemier: h.prizeMoney ?? 0, rekord: livs?.mark ?? '',
     });
     await new Promise((r) => setTimeout(r, 150)); // rolig takt mod API'et
@@ -214,6 +217,9 @@ function test() {
   assert.equal(erStart(raa({ raceType: { displayValue: 'k' } })), false);
   assert.equal(erStart(raa({ placement: { displayValue: '' } })), false);
   assert.equal(kuskNavn('Nielsen Marc Bæk'), 'Marc Bæk Nielsen');
+  assert.equal(erEgetOpdraet('TeamBakkelygaard & MBTrav(M.B.Nielsen)'), true);
+  assert.equal(erEgetOpdraet('Global Farm AB'), false);
+  assert.equal(erEgetOpdraet(undefined), false);
   assert.equal(kuskVist('Marc Bæk Nielsen'), 'Marc');
   assert.equal(kuskVist('Jeppe Juel'), 'Jeppe Juel');
   assert.deepEqual(vaekst([{ aar: 2026, praemier: 9 }, { aar: 2025, praemier: 12 }, { aar: 2022, praemier: 2 }, { aar: 2021, praemier: 0 }]), { fra: { aar: 2022, praemier: 2 }, top: { aar: 2025, praemier: 12 } });

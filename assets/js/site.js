@@ -31,3 +31,23 @@ const taeller = new IntersectionObserver((poster) => {
   for (const p of poster) if (p.isIntersecting) { tael(p.target); taeller.unobserve(p.target); }
 }, { threshold: 0.4 });
 if (!roligt) document.querySelectorAll('[data-tael]').forEach((el) => { el.textContent = '0'; taeller.observe(el); });
+
+// Træningslisten: filtrér efter type og sortér. Uden JavaScript vises hele listen.
+for (const liste of document.querySelectorAll('[data-liste]')) {
+  const ul = liste.querySelector('.hesteliste');
+  const raekker = [...ul.children];
+  const knapper = liste.querySelectorAll('[data-filter]');
+  const vaelg = liste.querySelector('[data-sorter]');
+  const vis = (filter) => {
+    knapper.forEach((k) => k.setAttribute('aria-pressed', String(k.dataset.filter === filter)));
+    raekker.forEach((r) => { r.hidden = filter !== 'alle' && !r.dataset.type.split(' ').includes(filter); });
+  };
+  const sorter = (noegle) => {
+    const tal = (r) => Number(r.dataset[noegle]);
+    raekker.sort((a, b) => (noegle === 'navn' ? a.dataset.navn.localeCompare(b.dataset.navn, 'da') : noegle === 'alder' ? tal(a) - tal(b) : tal(b) - tal(a)));
+    ul.append(...raekker);
+  };
+  knapper.forEach((k) => k.addEventListener('click', () => vis(k.dataset.filter)));
+  vaelg?.addEventListener('change', () => sorter(vaelg.value));
+  raekker.forEach((r) => r.classList.add('ses'));
+}

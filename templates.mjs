@@ -17,8 +17,8 @@ export const SITE = {
   postnr: '9362',
   by: 'Gandrup',
   sted: 'Øster Hassing', // "vores gård i Øster Hassing" (mbtrav.dk/faciliteter)
-  facebook: '', // ingen fundet 19.11.2026
-  instagram: '',
+  facebook: 'https://www.facebook.com/mbtrav', // staldens side "MB TRAV"
+  instagram: 'https://www.instagram.com/mb.trav/',
   travinfo: 'https://travinfo.dk/licenseholder-tabs/502909',
   kort: 'https://www.google.com/maps/search/?api=1&query=Holtetvej+73%2C+9362+Gandrup',
 };
@@ -154,6 +154,14 @@ const billede = (navn, alt, { sizes = '100vw', lazy = true, cls = '', pos = '' }
 };
 const etiket = (tekst, attr = '') => `<p class="etiket"${attr}>${tekst}</p>`;
 
+const FB_IKON = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M13.4 21v-7.5h2.5l.4-2.9h-2.9V8.8c0-.8.2-1.4 1.4-1.4h1.6V4.8a20 20 0 0 0-2.3-.1c-2.3 0-3.8 1.4-3.8 3.9v2H7.8v2.9h2.5V21z" fill="currentColor"/></svg>';
+const IG_IKON = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="7" r="1.2" fill="currentColor"/></svg>';
+const sociale = (cls = '') => `<ul class="sociale ${cls}">
+      <li><a href="${SITE.facebook}" target="_blank" rel="noopener">${FB_IKON}<span><b>Facebook</b><small>MB TRAV</small></span>${ud}${nyFane}</a></li>
+      <li><a href="${SITE.instagram}" target="_blank" rel="noopener">${IG_IKON}<span><b>Instagram</b><small>@mb.trav</small></span>${ud}${nyFane}</a></li>
+    </ul>`;
+
+
 // ---------- afledte tal ----------
 
 function afled(data, idag) {
@@ -188,6 +196,11 @@ function afled(data, idag) {
     kuskAar: data.kuskStatistik.filter((s) => s.starter > 0).reverse(),
     albatros: heste.find((h) => h.navn.toLowerCase() === 'albatros'),
     sejreIAar: iAar.filter((x) => x.placering === '1').map(medNavn),
+    opdraet: heste.filter((h) => h.egetOpdraet).sort((a, b) => a.alder - b.alder || a.navn.localeCompare(b.navn, 'da')),
+    maaneder: Array.from({ length: 12 }, (_, m) => {
+      const her = iAar.filter((x) => Number(x.dato.slice(5, 7)) === m + 1);
+      return { m, starter: her.length, sejre: her.filter((x) => x.placering === '1').length };
+    }),
     fb: (data.facebook ?? []).slice(0, 5),
   };
 }
@@ -220,6 +233,8 @@ const top = (sti) => `
   <div class="menu__bund">
     <a href="tel:${tlfLink}">${SITE.telefon}</a>
     <a href="mailto:${SITE.email}">${SITE.email}</a>
+    <a href="${SITE.facebook}" target="_blank" rel="noopener">Facebook${nyFane}</a>
+    <a href="${SITE.instagram}" target="_blank" rel="noopener">Instagram${nyFane}</a>
   </div>
 </dialog>`;
 
@@ -257,7 +272,8 @@ const bund = (o) => `
     <div>
       <h2>Følg med</h2>
       <ul>
-        ${SITE.facebook ? `<li>${ekstern(SITE.facebook, 'Facebook', '')}</li>` : ''}
+        <li>${ekstern(SITE.facebook, 'Facebook', '')}</li>
+        <li>${ekstern(SITE.instagram, 'Instagram', '')}</li>
         <li>${ekstern(SITE.travinfo, 'Travinfo', '')}</li>
       </ul>
     </div>
@@ -281,7 +297,7 @@ const organisation = () => ({
   foundingDate: SITE.start,
   address: { '@type': 'PostalAddress', streetAddress: SITE.gade, postalCode: SITE.postnr, addressLocality: SITE.by, addressCountry: 'DK' },
   founder: { '@id': `${SITE.url}/#person` },
-  sameAs: [SITE.travinfo, SITE.facebook].filter(Boolean),
+  sameAs: [SITE.travinfo, SITE.facebook, SITE.instagram],
 });
 const person = () => ({
   '@type': 'Person',
@@ -542,6 +558,56 @@ const sekhoved = (etik, h2, tekst = '') => `
       ${tekst ? `<p data-vis style="--i:2">${tekst}</p>` : ''}
     </div>`;
 
+// Staldens eget opdræt (Team Bakkelygaard & MB Trav i registret) – alle med fodboldnavne (Travservice 5.6.2023).
+const opdraet = (o) => (o.opdraet.length ? `
+<section class="sek opdraet">
+  <div class="wrap">
+    ${sekhoved('Eget opdræt', 'Holdet med fodboldnavne', `Sammen med Team Bakkelygaard opdrætter ${SITE.fornavn} selv heste – og de får navne efter fodboldklubber. Fra opdrættet er bl.a. kommet Dortmund, Celtic og Benfica. Lige nu står ${o.opdraet.length} på træningslisten.`)}
+    <ol class="klubber">${o.opdraet.map((h, i) => `
+      <li data-vis style="--i:${i % 3}">
+        <span class="klubber__nr" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
+        <h3>${esc(h.navn)}</h3>
+        <p>${omHest(h)}${h.foedt ? ` · årgang ${h.foedt.slice(0, 4)}` : ''}</p>
+        <b>${h.starter ? `${sejreTekst(sejre(h))} · ${kr(h.praemier)}` : 'Ustartet'}</b>
+      </li>`).join('')}
+    </ol>${o.opdraet.some((h) => h.navn === 'Mainz') ? `
+    <p class="opdraet__note" data-vis>Mainz er lillebror til Dortmund, der blev nummer tre i Dansk Trav Derby 2019.</p>` : ''}
+  </div>
+</section>` : '');
+
+const MAANED = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+// Starter og sejre pr. måned i sæsonen som dobbeltsøjler.
+const maanedsgraf = (o) => {
+  const max = Math.max(1, ...o.maaneder.map((m) => m.starter));
+  return `<figure class="maaned" data-vis>
+      <ol aria-label="Starter og sejre pr. måned i ${o.saeson.aar}: ${o.maaneder.filter((m) => m.starter).map((m) => `${MAANED[m.m]} ${m.starter} starter, ${m.sejre} sejre`).join('; ')}">${o.maaneder.map((m) => `
+        <li style="--s:${Math.round((m.starter / max) * 100)}%;--v:${Math.round((m.sejre / max) * 100)}%"><i class="maaned__s" aria-hidden="true"></i><i class="maaned__v" aria-hidden="true"></i>${m.sejre ? `<b>${m.sejre}</b>` : ''}<span>${MAANED[m.m]}</span></li>`).join('')}
+      </ol>
+      <figcaption><span class="maaned__tegn maaned__tegn--s"></span>Starter <span class="maaned__tegn maaned__tegn--v"></span>Sejre – tallet over søjlen er sejre</figcaption>
+    </figure>`;
+};
+
+// Hele træningslisten i én liste, der kan filtreres og sorteres (site.js). Uden JavaScript vises alle.
+const hesteliste = (o) => `
+    <div class="liste" data-liste>
+      <div class="liste__styr">
+        <div class="liste__filtre" role="group" aria-label="Vis">
+          <button type="button" data-filter="alle" aria-pressed="true">Alle <span>${o.heste.length}</span></button>
+          <button type="button" data-filter="loeb" aria-pressed="false">Løbsheste <span>${o.heste.filter((h) => h.alder >= 3).length}</span></button>
+          <button type="button" data-filter="ung" aria-pressed="false">Ungheste <span>${o.ungheste.length}</span></button>
+          ${o.opdraet.length ? `<button type="button" data-filter="opdraet" aria-pressed="false">Eget opdræt <span>${o.opdraet.length}</span></button>` : ''}
+        </div>
+        <label class="liste__sorter">Sortér <select data-sorter>
+          <option value="praemier">Mest indkørt</option>
+          <option value="sejre">Flest sejre</option>
+          <option value="navn">Navn</option>
+          <option value="alder">Alder</option>
+        </select></label>
+      </div>
+      <ul class="hesteliste">${o.heste.map((h, i) => hesteraekke(h, i).replace('<li class="hest"', `<li class="hest" data-navn="${esc(h.navn)}" data-praemier="${h.praemier}" data-sejre="${sejre(h)}" data-alder="${h.alder}" data-type="${h.alder >= 3 ? 'loeb' : 'ung'}${h.egetOpdraet ? ' opdraet' : ''}"`).replace('</h3>', `</h3>${h.egetOpdraet ? '<span class="maerke">Eget opdræt</span>' : ''}`)).join('')}
+      </ul>
+    </div>`;
+
 // ---------- sider ----------
 
 const forside = (o) => `
@@ -642,10 +708,11 @@ ${kontaktbaand()}`;
 
 // Karrieren i årstal. Kilder: mbtrav.dk/mb-trav (jockeytid og meritter), CVR-registret (MB Trav fra 1.9.2016) og Dansk Hestevæddeløb (præmier).
 const karriere = (o) => [
-  { aar: '2012 · 2015', titel: 'Jockey-DM', tekst: 'Fra tiden som jockey hos Bo Westergaard, Flemming Jensen og Peter Jensen.' },
-  { aar: '2016', titel: 'Egen stald', tekst: 'MB Trav starter 1. september. Samme år bliver Albatros nummer tre i Dansk Trav Derby og Årets 4-åring i Aalborg.', stor: true },
-  { aar: '2017', titel: 'Årets Hest på Skive Trav', tekst: "Gentleman bliver Årets Hest på Skive Trav. Good's Of Norway står på meritlisten fra Liga 2-finalen i Aarhus og et Quinté-løb i Cabourg." },
-  { aar: '2019', titel: 'Derbyet igen', tekst: 'Dortmund vinder Grand Prix-prøven og Derby-prøven og bliver nummer tre i Dansk Trav Derby.', stor: true },
+  { aar: '12 år', titel: 'Vang Hovedgaard', tekst: 'Marc kommer i stalden hos Bo Westergaard og Peter Jensen på Vang Hovedgaard.' },
+  { aar: '16 år', titel: 'Amatørlicens', tekst: 'Senere følger også et ophold hos Flemming Jensen.' },
+  { aar: '2012 · 2015', titel: 'DM for jockeyer', tekst: 'Marc vinder DM for jockeyer – to gange.', stor: true },
+  { aar: '2016', titel: 'Egen stald', tekst: 'MB Trav starter 1. september, og 1. oktober bliver Marc træner. Samme år: Jydsk 3-årings Hoppe Grand Prix med Blowmywhistle, sejr i løbsserien Sigter Mod Stjernerne og 3. plads i Dansk Trav Derby med Albatros.', stor: true },
+  { aar: '2019', titel: 'Derbyet igen', tekst: 'Dortmund vinder Grand Prix-prøven og Derby-prøven, bliver nummer tre i Dansk Trav Derby og vinder siden Grand Circle 4-års Championat.', stor: true },
   { aar: '2020', titel: 'DM for 5-årige hopper', tekst: 'Diva Sisa vinder i Billund.' },
   { aar: '2021', titel: 'Stayerpokalen', tekst: 'Dortmund vinder i Nykøbing F.' },
   ...(o.vaekst.top.praemier >= 1e6 ? [{ aar: String(o.vaekst.top.aar), titel: 'Over en million', tekst: `Staldens heste kører ${kr(o.vaekst.top.praemier)} ind på ${o.praemieAar.find((s) => s.aar === o.vaekst.top.aar).starter} starter.`, stor: true }] : []),
@@ -691,15 +758,15 @@ ${sidehoved({
     <div>
       ${etiket('Historien', ' data-vis')}
       <h2 data-vis style="--i:1">Fra jockey til træner</h2>
-      <p class="indled" data-vis style="--i:2">${SITE.fornavn} var jockey hos Bo Westergaard, Flemming Jensen og Peter Jensen og har Jockey-DM i 2012 og 2015 på meritlisten. I september 2016 startede han ${SITE.navn}.</p>
-      <p data-vis style="--i:3">Hestene trænes fra gården i ${SITE.sted} med egen travbane, galopbane med strandsand og folde, mens unghestene står på Bakkelygård i Stae. ${SITE.fornavn} kører også selv – i ${o.kusk.aar} er det blevet til ${o.kusk.starter} starter og ${sejreTekst(o.kusk.sejre)} i sulkyen.</p>
+      <p class="indled" data-vis style="--i:2">${SITE.fornavn} kom som 12-årig i stalden hos Bo Westergaard og Peter Jensen på Vang Hovedgaard og fik amatørlicens som 16-årig. Som jockey vandt han DM for jockeyer i 2012 og 2015 – og i september 2016 startede han ${SITE.navn}.</p>
+      <p data-vis style="--i:3">Hestene trænes fra gården i ${SITE.sted} med egen travbane, galopbane med strandsand og folde, mens unghestene står på Bakkelygård i Stae. ${SITE.fornavn} kører også selv – i ${o.kusk.aar} er det blevet til ${o.kusk.starter} starter og ${sejreTekst(o.kusk.sejre)} i sulkyen. Han er medlem af Dansk Travtrænerforening af 1909.</p>
       <p class="valg" data-vis style="--i:4">${ekstern(SITE.travinfo, `${SITE.fornavn}s profil på Travinfo`)}</p>
     </div>
     <dl class="faktagitter" data-vis style="--i:2">
       <div><dt>Født</dt><dd>${data.traener.foedt}</dd></div>
       <div><dt>Licens</dt><dd>${esc(data.traener.licens)}</dd><dd class="lille">professionel træner og kusk</dd></div>
       <div><dt>Hjemmebane</dt><dd>Aalborg</dd><dd class="lille">${esc(data.traener.hjemmebane)}</dd></div>
-      <div><dt>Egen stald</dt><dd>2016</dd><dd class="lille">${SITE.navn} siden ${langDato(SITE.start)}</dd></div>
+      <div><dt>Træner siden</dt><dd>2016</dd><dd class="lille">${SITE.navn} fra ${langDato(SITE.start)}</dd></div>
       <div><dt>Løbsfarver</dt><dd class="farver"><i style="--f:#1c2c55"></i><i style="--f:#9aa1ab"></i></dd><dd class="lille">${esc(data.traener.farver)}</dd></div>
       <div><dt>Heste i træning</dt><dd data-tael="${o.heste.length}">${o.heste.length}</dd><dd class="lille">${o.ungheste.length} af dem ungheste</dd></div>
     </dl>
@@ -742,6 +809,7 @@ ${o.albatros ? `
   </div>
 </section>` : ''}
 
+${opdraet(o)}
 <section class="sek">
   <div class="wrap">
     ${sekhoved('Meritter', 'Udvalgte resultater 2016–2021', `Fra ${SITE.fornavn}s egen meritliste – ${MERITTER.length} resultater på seks sæsoner.`)}
@@ -922,12 +990,12 @@ ${sidehoved({
 
 <section class="sek">
   <div class="wrap">
-    ${hestegruppe('Løbsheste', o.heste.filter((h) => h.alder >= 3))}
-    ${hestegruppe('2-årige', o.heste.filter((h) => h.alder === 2))}
-    ${hestegruppe('Åringer', o.heste.filter((h) => h.alder <= 1))}
+    <h2 class="gruppe__titel" data-vis>Træningslisten</h2>
+    ${hesteliste(o)}
     <p class="note" data-vis>Starter, placeringer (1.–2.–3.), præmiesum og rekord er livstal. Rekorden er hestens hurtigste kilometertid; a = autostart, k/m/l = kort, mellem og lang distance. Klik på en hest for at se den på Travinfo. Kilde: Dansk Hestevæddeløb, opdateret ${o.opdateret}.</p>
   </div>
 </section>
+${opdraet(o)}
 ${kontaktbaand()}`;
 
 const sejrskort = (r, i) => `
@@ -959,9 +1027,15 @@ ${sidehoved({
       <div><dt>Sejrsprocent</dt><dd>${o.saeson.procent}<small>%</small></dd></div>
       <div><dt>Indkørt</dt><dd><span data-tael="${o.saeson.praemier}">${nf(o.saeson.praemier)}</span><small>kr.</small></dd></div>
     </dl>
-    <div class="formboks" data-vis style="--i:1">
-      <h2 class="mini">Formkurve – de seneste ${o.seneste.length} starter</h2>
-      ${formkurve(o.seneste)}
+    <div class="duo duo--top duo--luft">
+      <div class="formboks" data-vis style="--i:1">
+        <h2 class="mini">Formkurve – de seneste ${o.seneste.length} starter</h2>
+        ${formkurve(o.seneste)}
+      </div>
+      <div data-vis style="--i:2">
+        <h2 class="mini">Måned for måned i ${o.saeson.aar}</h2>
+        ${maanedsgraf(o)}
+      </div>
     </div>
   </div>
 </section>
@@ -1032,6 +1106,13 @@ ${sidehoved({
       <h2 class="mini">Mail</h2>
       <p class="kontakt__stor kontakt__stor--mail"><a href="mailto:${SITE.email}">${SITE.email}</a></p>
       <p class="valg"><a class="knap" href="mailto:${SITE.email}">Skriv til ${SITE.fornavn} ${pil}</a></p>
+    </div>
+    <div class="kontakt__felt kontakt__felt--fuld" data-vis style="--i:2">
+      <div>
+        <h2 class="mini">Følg med</h2>
+        <p>Startdage, sejre og hverdagen i stalden deles på Facebook og Instagram.</p>
+      </div>
+      ${sociale()}
     </div>
   </div>
 </section>
