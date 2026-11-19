@@ -27,13 +27,13 @@ export const SITE = {
 const BILLEDER = {
   strand: [1.873, 800, 1400, 2200],
   soe: [1.5, 700, 1200, 1800],
-  sne: [1.5, 700, 1200],
-  fold: [1.5, 700, 1200],
-  hoe: [1.5, 600, 1000],
-  skov: [1.5, 600, 1000],
+  sne: [1.5, 700, 1200, 1600, 2200],
+  fold: [1.5, 700, 1200, 1600, 2200],
+  hoe: [1.5, 600, 1000, 1600, 2200],
+  skov: [1.5, 600, 1000, 1600, 2200],
   solarie: [0.863, 500, 900],
   solopgang: [1, 500, 900],
-  ryttere: [1.205, 600, 1000],
+  ryttere: [1.205, 600, 1000, 1600, 2200],
   staende: [0.926, 500, 900],
   vand: [1.5, 700, 1200],
   stald: [1.905, 600, 960],
@@ -42,6 +42,9 @@ const BILLEDER = {
   skovtur: [0.75, 500, 960],
   rytter: [0.75, 500, 900],
   pleje: [0.83, 500, 900],
+  udebokse: [0.749, 500, 750],
+  ligeud: [1, 500, 960],
+  sandbane: [0.75, 500, 720],
 };
 
 const BANER = { Sk: 'Skive', 'Ål': 'Aalborg', 'År': 'Aarhus', Od: 'Odense', Ch: 'Charlottenlund', Bi: 'Billund', Bh: 'Bornholm', Ny: 'Nykøbing F.', Bs: 'Skovbo', Kl: 'Klampenborg', 'Åb': 'Åby', 'Jæ': 'Jägersro', Ax: 'Axevalla' };
@@ -184,6 +187,7 @@ function afled(data, idag) {
     traenerAar: [...traenerAar].reverse(), // ældste først til søjlerne
     kuskAar: data.kuskStatistik.filter((s) => s.starter > 0).reverse(),
     albatros: heste.find((h) => h.navn.toLowerCase() === 'albatros'),
+    sejreIAar: iAar.filter((x) => x.placering === '1').map(medNavn),
     fb: (data.facebook ?? []).slice(0, 5),
   };
 }
@@ -338,19 +342,17 @@ ${bund(o)}
 `;
 }
 
-// Sidehoved på undersider: stor bred overskrift og tal på sandfarven, foto til højre.
+// Sidehoved på undersider: foto i fuld bredde med overskriften nederst (som forsiden) og nøgletal i en stribe under.
 const sidehoved = ({ sti, h1, tekst, figur, pos = '50% 50%', chips = [] }) => `
 <section class="sidehoved">
-  <div class="wrap sidehoved__gitter">
-    <div class="sidehoved__tekst">
-      <nav class="sti" aria-label="Brødkrumme"><a href="${R}">Forside</a><span aria-hidden="true">/</span><span aria-current="page">${sti}</span></nav>
-      <h1>${h1}</h1>
-      <p class="indled">${tekst}</p>
-      ${chips.length ? `<dl class="chips">${chips.map(([tal, tekst]) => `<div><dt>${tekst}</dt><dd>${tal}</dd></div>`).join('')}</dl>` : ''}
-    </div>
-    <figure class="sidehoved__foto">${billede(figur[0], figur[1], { sizes: '(min-width: 901px) 46vw, 100vw', lazy: false, pos })}</figure>
+  ${billede(figur[0], figur[1], { sizes: '100vw', lazy: false, cls: 'sidehoved__foto', pos })}
+  <div class="sidehoved__tekst">
+    <nav class="sti" aria-label="Brødkrumme"><a href="${R}">Forside</a><span aria-hidden="true">/</span><span aria-current="page">${sti}</span></nav>
+    <h1>${h1}</h1>
+    <p class="indled">${tekst}</p>
   </div>
-</section>`;
+</section>${chips.length ? `
+<div class="stribe"><dl class="wrap stribe__tal">${chips.map(([tal, tekst]) => `<div><dt>${tekst}</dt><dd>${tal}</dd></div>`).join('')}</dl></div>` : ''}`;
 
 /**
  * Skematisk Danmarkskort. `punkter` er [{ kode, navn, antal?, sejre? }]: med antal tegnes en boble, hvis størrelse følger
@@ -638,74 +640,123 @@ const forside = (o) => `
 </section>
 ${kontaktbaand()}`;
 
+// Karrieren i årstal. Kilder: mbtrav.dk/mb-trav (jockeytid og meritter), CVR-registret (MB Trav fra 1.9.2016) og Dansk Hestevæddeløb (præmier).
+const karriere = (o) => [
+  { aar: '2012 · 2015', titel: 'Jockey-DM', tekst: 'Fra tiden som jockey hos Bo Westergaard, Flemming Jensen og Peter Jensen.' },
+  { aar: '2016', titel: 'Egen stald', tekst: 'MB Trav starter 1. september. Samme år bliver Albatros nummer tre i Dansk Trav Derby og Årets 4-åring i Aalborg.', stor: true },
+  { aar: '2017', titel: 'Årets Hest på Skive Trav', tekst: "Gentleman bliver Årets Hest på Skive Trav. Good's Of Norway står på meritlisten fra Liga 2-finalen i Aarhus og et Quinté-løb i Cabourg." },
+  { aar: '2019', titel: 'Derbyet igen', tekst: 'Dortmund vinder Grand Prix-prøven og Derby-prøven og bliver nummer tre i Dansk Trav Derby.', stor: true },
+  { aar: '2020', titel: 'DM for 5-årige hopper', tekst: 'Diva Sisa vinder i Billund.' },
+  { aar: '2021', titel: 'Stayerpokalen', tekst: 'Dortmund vinder i Nykøbing F.' },
+  ...(o.vaekst.top.praemier >= 1e6 ? [{ aar: String(o.vaekst.top.aar), titel: 'Over en million', tekst: `Staldens heste kører ${kr(o.vaekst.top.praemier)} ind på ${o.praemieAar.find((s) => s.aar === o.vaekst.top.aar).starter} starter.`, stor: true }] : []),
+];
+
+const tidslinje = (o) => `
+    <ol class="tidslinje">${karriere(o).map((p, i) => `
+      <li class="tidslinje__punkt${p.stor ? ' tidslinje__punkt--stor' : ''}" data-vis style="--i:${i % 3}">
+        <b>${p.aar}</b>
+        <h3>${p.titel}</h3>
+        <p>${p.tekst}</p>
+      </li>`).join('')}
+    </ol>`;
+
+// Meritlisten samlet pr. år som kort.
+const aarskort = () => {
+  const aar = [...new Set(MERITTER.map(([a]) => a))];
+  return `<div class="aarskort">${aar.map((a, i) => `
+      <section class="aarskort__aar" data-vis style="--i:${i % 3}">
+        <h3>${a}</h3>
+        <ul>${MERITTER.filter(([x]) => x === a).map(([, titel, hest]) => `<li><span>${titel}</span>${hest ? `<b>${hest}</b>` : ''}</li>`).join('')}</ul>
+      </section>`).join('')}
+    </div>`;
+};
+
+const fotostribe = (fotos) => `
+<section class="fotostribe" aria-label="Billeder fra stalden">${fotos.map(([navn, alt], i) => `
+  <figure data-vis style="--i:${i}">${billede(navn, alt, { sizes: `(min-width: 760px) ${Math.round(100 / fotos.length)}vw, 100vw` })}</figure>`).join('')}
+</section>`;
+
 const omMarc = (o, data) => `
 ${sidehoved({
   sti: 'Om Marc',
-  h1: 'Om Marc',
-  tekst: `Travtræner og kusk med ${esc(data.traener.licens)}-licens, født i ${data.traener.foedt}. Tidligere jockey hos Bo Westergaard, Flemming Jensen og Peter Jensen – og siden 2016 med egen stald, ${SITE.navn}.`,
-  figur: ['staende', 'Mørk travhest på gårdspladsen'],
-  pos: '50% 35%',
+  h1: SITE.person,
+  tekst: `Travtræner og kusk med ${esc(data.traener.licens)}-licens. Tidligere jockey – og siden 2016 med egen stald.`,
+  figur: ['fold', 'Travhest på folden'],
+  pos: '50% 24%',
   chips: [[o.heste.length, 'heste i træning'], [o.saeson.sejre, `sejre i ${o.saeson.aar}`], ['2016', 'egen stald siden']],
 })}
 
 <section class="sek">
-  <div class="wrap artikel">
-    <aside class="fakta" data-vis>
-      <h2 class="mini">Fakta</h2>
-      <dl>
-        <div><dt>Født</dt><dd>${data.traener.foedt}</dd></div>
-        <div><dt>Licens</dt><dd>${esc(data.traener.licens)} – professionel træner og kusk</dd></div>
-        <div><dt>Hjemmebane</dt><dd>${esc(data.traener.hjemmebane)}</dd></div>
-        <div><dt>Løbsfarver</dt><dd>${esc(data.traener.farver)}</dd></div>
-        <div><dt>Egen stald</dt><dd>${SITE.navn} siden ${langDato(SITE.start)}</dd></div>
-        <div><dt>Gården</dt><dd>${SITE.sted}</dd></div>
-        <div><dt>Heste i træning</dt><dd>${o.heste.length}</dd></div>
-      </dl>
-    </aside>
-    <div class="prosa">
+  <div class="wrap intro">
+    <div>
       ${etiket('Historien', ' data-vis')}
-      <h2 data-vis>Fra jockey til træner</h2>
-      <p class="indled" data-vis>${SITE.fornavn} var jockey hos Bo Westergaard, Flemming Jensen og Peter Jensen og har Jockey-DM i 2012 og 2015 på meritlisten.</p>
-      <p data-vis>I september 2016 startede han ${SITE.navn}. Samme år blev Albatros nummer tre i Dansk Trav Derby og Årets 4-åring på Aalborg Væddeløbsbane, og i 2019 gentog Dortmund tredjepladsen i Derbyet – efter sejre i både Grand Prix-prøven og Derby-prøven.</p>
-      <p data-vis>Hestene trænes fra gården i ${SITE.sted} med egen travbane, galopbane med strandsand og folde, mens unghestene står på Bakkelygård i Stae. Lige nu står ${o.heste.length} heste på træningslisten, og i ${o.vaekst.top.aar} kørte staldens heste ${kr(o.vaekst.top.praemier)} ind.</p>
-      <figure class="prosa__foto" data-vis>${billede('soe', 'Hest og hjælper svømmer i søen', { sizes: '(min-width: 1000px) 60vw, 92vw' })}<figcaption>Vandtræning i søen.</figcaption></figure>
-      <h2 data-vis>Træner og kusk</h2>
-      <p data-vis>Som træner har ${SITE.fornavn} i ${o.saeson.aar} haft ${o.saeson.starter} starter og ${sejreTekst(o.saeson.sejre)}. Han kører også selv – i ${o.kusk.aar} er det blevet til ${o.kusk.starter} starter og ${sejreTekst(o.kusk.sejre)} i sulkyen.</p>
-      <p class="valg" data-vis>${ekstern(SITE.travinfo, `Se ${SITE.fornavn}s profil på Travinfo`)}</p>
+      <h2 data-vis style="--i:1">Fra jockey til træner</h2>
+      <p class="indled" data-vis style="--i:2">${SITE.fornavn} var jockey hos Bo Westergaard, Flemming Jensen og Peter Jensen og har Jockey-DM i 2012 og 2015 på meritlisten. I september 2016 startede han ${SITE.navn}.</p>
+      <p data-vis style="--i:3">Hestene trænes fra gården i ${SITE.sted} med egen travbane, galopbane med strandsand og folde, mens unghestene står på Bakkelygård i Stae. ${SITE.fornavn} kører også selv – i ${o.kusk.aar} er det blevet til ${o.kusk.starter} starter og ${sejreTekst(o.kusk.sejre)} i sulkyen.</p>
+      <p class="valg" data-vis style="--i:4">${ekstern(SITE.travinfo, `${SITE.fornavn}s profil på Travinfo`)}</p>
     </div>
+    <dl class="faktagitter" data-vis style="--i:2">
+      <div><dt>Født</dt><dd>${data.traener.foedt}</dd></div>
+      <div><dt>Licens</dt><dd>${esc(data.traener.licens)}</dd><dd class="lille">professionel træner og kusk</dd></div>
+      <div><dt>Hjemmebane</dt><dd>Aalborg</dd><dd class="lille">${esc(data.traener.hjemmebane)}</dd></div>
+      <div><dt>Egen stald</dt><dd>2016</dd><dd class="lille">${SITE.navn} siden ${langDato(SITE.start)}</dd></div>
+      <div><dt>Løbsfarver</dt><dd class="farver"><i style="--f:#1c2c55"></i><i style="--f:#9aa1ab"></i></dd><dd class="lille">${esc(data.traener.farver)}</dd></div>
+      <div><dt>Heste i træning</dt><dd data-tael="${o.heste.length}">${o.heste.length}</dd><dd class="lille">${o.ungheste.length} af dem ungheste</dd></div>
+    </dl>
   </div>
 </section>
+
+<section class="sek sek--sand2">
+  <div class="wrap">
+    ${sekhoved('Karrieren', 'Årene, der tæller', 'Udvalgte højdepunkter fra meritlisten – og sæsonen, hvor stalden rundede en million.')}
+    ${tidslinje(o)}
+  </div>
+</section>
+${fotostribe([['soe', 'Hest og hjælper svømmer i søen'], ['ryttere', 'To ryttere på banen i sne'], ['solopgang', 'Ryttere på banen i solopgang']])}
 ${o.albatros ? `
 <section class="sek sek--blaek">
   <div class="wrap albatros">
+    <div class="albatros__tal" data-vis>
+      <b>${o.albatros.alder}</b>
+      <span>år – og stadig i stalden</span>
+    </div>
     <div>
       ${etiket('Stadig i stalden', ' data-vis')}
       <h2 data-vis style="--i:1">Albatros</h2>
-      <p class="indled" data-vis style="--i:2">Nummer tre i Dansk Trav Derby 2016, Årets 4-åring i Aalborg samme år og DM i Monté i 2019 står alle på meritlisten. I dag er Albatros ${o.albatros.alder} år – og står stadig på træningslisten.</p>
-      <dl class="mini-tal" data-vis style="--i:3">
+      <p class="indled" data-vis style="--i:2">Nummer tre i Dansk Trav Derby 2016, Årets 4-åring i Aalborg samme år – og siden flere gange med i DM i Monté.</p>
+      <ol class="albatros__linje" data-vis style="--i:3">
+        <li><b>2016</b>3. plads i Dansk Trav Derby</li>
+        <li><b>2016</b>Årets 4-åring, Aalborg</li>
+        <li><b>2018</b>DM i Monté, Consolation</li>
+        <li><b>2019</b>DM i Monté, Odense</li>
+        <li><b>2021</b>DM i Monté, Consolation</li>
+      </ol>
+      <dl class="mini-tal" data-vis style="--i:4">
         <div><dt>Starter</dt><dd>${o.albatros.starter}</dd></div>
         <div><dt>Sejre</dt><dd>${sejre(o.albatros)}</dd></div>
-        <div><dt>Indkørt</dt><dd>${kr(o.albatros.praemier)}</dd></div>
-      </dl>
+        <div><dt>Indkørt i karrieren</dt><dd>${kr(o.albatros.praemier)}</dd></div>
+        ${bedsteRekord(o.albatros.rekord) ? `<div><dt>Rekord</dt><dd>${bedsteRekord(o.albatros.rekord)}</dd></div>` : ''}
+      </dl>${o.kommende.find((k) => k.hestId === o.albatros.id) ? `
+      <p class="naeste naeste--moerk" data-vis style="--i:5"><span>Næste start</span>${(({ dato, bane: b }) => `${ugedag(dato)} ${kortDato(dato)} · ${esc(bane(b))}`)(o.kommende.find((k) => k.hestId === o.albatros.id))}</p>` : ''}
     </div>
   </div>
 </section>` : ''}
 
 <section class="sek">
   <div class="wrap">
-    ${sekhoved('Meritter', 'Udvalgte resultater 2016–2021', `Fra ${SITE.fornavn}s egen meritliste.`)}
-    <ol class="meritter" data-vis>${MERITTER.map(([aar, titel, hest], i, a) => `
-      <li${i === 0 || a[i - 1][0] !== aar ? ' class="ny"' : ''}><b>${aar}</b><span>${titel}</span><i>${hest}</i></li>`).join('')}
-    </ol>
+    ${sekhoved('Meritter', 'Udvalgte resultater 2016–2021', `Fra ${SITE.fornavn}s egen meritliste – ${MERITTER.length} resultater på seks sæsoner.`)}
+    ${aarskort()}
   </div>
 </section>
 
 <section class="sek sek--sand2">
   <div class="wrap">
     ${sekhoved('Statistik', 'Sæson for sæson', `Officielle tal fra Dansk Hestevæddeløb, opdateret ${o.opdateret}.`)}
-    <div class="soejlepar">
-      ${soejler('Sejre som træner', o.traenerAar)}
-      ${soejler('Sejre som kusk', o.kuskAar)}
+    <div class="duo duo--top">${praemiegraf(o.praemieAar, o.saeson.aar)}
+      <div class="soejlepar">
+        ${soejler('Sejre som træner', o.traenerAar)}
+        ${soejler('Sejre som kusk', o.kuskAar)}
+      </div>
     </div>
     <div class="tabeller" data-vis>
       ${statTabel('Som træner', data.traenerStatistik)}
@@ -715,25 +766,59 @@ ${o.albatros ? `
 </section>
 ${kontaktbaand()}`;
 
+// Gårdens faciliteter som fotokort. Billederne viser stalden og banerne på gården (mbtrav.dk/faciliteter).
+const FACILKORT = [
+  ['sandbane', 'To spor side om side på gårdens bane', '1.250 m', 'Travbane', 'med 600 m dobbeltsporet ligeudbane'],
+  ['ligeud', 'Lang, lige sandbane langs markerne', '400 m', 'Galopbane', 'med strandsand'],
+  ['bokse', 'Staldgangen med boksene', '16', 'Bokse i stalden', 'i staldbygningen'],
+  ['solarie', 'Hest under solariet', '9', 'Bokse i laden', 'samt solarieplads'],
+  ['udebokse', 'Udebokse på gårdspladsen', '4', 'Udebokse', 'og 2 løsdrifte'],
+  ['fold', 'Travhest på folden', '20 × 40 m', 'Ridebane', 'og store folde'],
+];
+
 const stalden = (o) => `
 ${sidehoved({
   sti: 'Stalden',
   h1: 'Stalden',
-  tekst: `${SITE.navn} træner ${o.heste.length} heste fra gården i ${SITE.sted}. Unghestene står på Bakkelygård i Stae, ca. 5 km fra gården.`,
-  figur: ['ryttere', 'To ryttere på gårdens bane i sne'],
+  tekst: `${o.heste.length} heste i træning fra gården i ${SITE.sted} – med egne baner, stald, lade og folde.`,
+  figur: ['sne', 'Træning i sulky på gårdens bane i sne'],
   pos: '50% 40%',
-  chips: [['1.250 m', 'travbane'], ['400 m', 'galopbane'], [o.heste.length, 'heste i træning']],
+  chips: [['1.250 m', 'travbane'], ['400 m', 'galopbane'], ['16 + 9', 'bokse']],
 })}
 
 <section class="sek">
   <div class="wrap">
     ${sekhoved(`Gården i ${SITE.sted}`, 'Faciliteterne', 'Egen travbane med dobbeltsporet ligeudbane, galopbane med strandsand, ridebane, stald, lade og store folde.')}
-    ${faciliteter()}
-    <div class="afstande" data-vis>
-      <p><b>30 min.</b> til Aalborg Væddeløbsbane</p>
-      <p><b>20 min.</b> til Happy Horse Spa &amp; Rehab med spa og vandbånd</p>
-      <p><b>1 time</b> til færgerne i Frederikshavn og Hirtshals</p>
+    <ul class="facilkort">${FACILKORT.map(([navn, alt, tal, titel, tekst], i) => `
+      <li data-vis style="--i:${i % 3}">
+        <figure>${billede(navn, alt, { sizes: '(min-width: 900px) 30vw, (min-width: 560px) 46vw, 92vw' })}</figure>
+        <b>${tal}</b>
+        <h3>${titel}</h3>
+        <p>${tekst}</p>
+      </li>`).join('')}
+    </ul>
+  </div>
+</section>
+
+<section class="sek sek--blaek">
+  <div class="wrap">
+    ${sekhoved('Ud af stalden', 'Strand, sø og skov', 'Ud over gårdens egne baner trænes hestene også på stranden, i søen og ad skovvejene.')}
+    <div class="trio">
+      <figure data-vis>${billede('strand', 'Tre heste i træning på stranden', { sizes: '(min-width: 900px) 50vw, 92vw' })}<figcaption>Stranden</figcaption></figure>
+      <figure data-vis style="--i:1">${billede('vand', 'Hest i vandet ved søen', { sizes: '(min-width: 900px) 25vw, 92vw' })}<figcaption>Søen</figcaption></figure>
+      <figure data-vis style="--i:2">${billede('skovtur', 'Ridetur ad en skovsti set mellem hestens ører', { sizes: '(min-width: 900px) 25vw, 92vw' })}<figcaption>Skoven</figcaption></figure>
     </div>
+  </div>
+</section>
+
+<section class="sek">
+  <div class="wrap">
+    ${sekhoved('Beliggenhed', 'Tæt på det hele', `Gården ligger i ${SITE.sted} i Nordjylland.`)}
+    <ol class="rute" data-vis>
+      <li><b>20 min.</b><span>Happy Horse Spa &amp; Rehab</span><small>spa og vandbånd</small></li>
+      <li><b>30 min.</b><span>Aalborg Væddeløbsbane</span><small>hjemmebanen</small></li>
+      <li><b>1 time</b><span>Frederikshavn og Hirtshals</span><small>færgerne</small></li>
+    </ol>
   </div>
 </section>
 
@@ -743,15 +828,21 @@ ${sidehoved({
     <div>
       ${etiket('Unghestene', ' data-vis')}
       <h2 data-vis style="--i:1">Bakkelygård i Stae</h2>
-      <p class="indled" data-vis style="--i:2">Unghestene står på Bakkelygård i Stae, ca. 5 km fra gården i ${SITE.sted}. Her er fine stalde, folde og træningsfaciliteter – med en 2.200 m bane og 600 m ligeudbane.</p>${o.ungheste.length ? `
-      <p data-vis style="--i:3">Lige nu står ${o.ungheste.length} åringer og 2-årige på træningslisten.</p>` : ''}
+      <p class="indled" data-vis style="--i:2">Unghestene står på Bakkelygård i Stae, ca. 5 km fra gården i ${SITE.sted}. Her er fine stalde, folde og træningsfaciliteter.</p>
+      <dl class="chips chips--lille" data-vis style="--i:3">
+        <div><dt>bane</dt><dd>2.200 m</dd></div>
+        <div><dt>ligeudbane</dt><dd>600 m</dd></div>
+        <div><dt>fra gården</dt><dd>ca. 5 km</dd></div>
+      </dl>${o.ungheste.length ? `
+      <p class="mini mini--luft" data-vis style="--i:4">Ungheste på træningslisten lige nu</p>
+      <ul class="navnechips" data-vis style="--i:4">${o.ungheste.map((h) => `<li>${esc(h.navn)} <small>${h.alder} år</small></li>`).join('')}</ul>` : ''}
     </div>
   </div>
 </section>
 
 <section class="sek">
   <div class="wrap">
-    ${sekhoved('Priser', 'Hvad koster det?', 'Alle priser er ekskl. moms. Ring til Marc for en snak om netop din hest.')}
+    ${sekhoved('Priser', 'Hvad koster det?', `Alle priser er ekskl. moms. Ring til ${SITE.fornavn} for en snak om netop din hest.`)}
     <ul class="priser" data-vis>${PRISER.map(([hvad, pris, note]) => `
       <li><span>${hvad}</span><b>${pris}</b>${note ? `<small>${note}</small>` : ''}</li>`).join('')}
     </ul>
@@ -760,7 +851,7 @@ ${sidehoved({
 
 <section class="sek sek--blaek">
   <div class="wrap">
-    ${sekhoved('Hverdagen', 'Bane, strand, sø og skov', 'Træningen foregår på gårdens egne baner, på stranden, i søen og ad skovvejene.')}
+    ${sekhoved('Hverdagen', 'Billeder fra stalden')}
     ${galleri()}
   </div>
 </section>
@@ -787,15 +878,47 @@ ${sidehoved({
 </section>
 ${kontaktbaand()}`;
 
+// Antal heste pr. alder som vandrette søjler.
+const aldersgraf = (heste) => {
+  const alle = [...new Set(heste.map((h) => h.alder))].sort((a, b) => a - b);
+  const max = Math.max(...alle.map((a) => heste.filter((h) => h.alder === a).length));
+  return `<figure class="alder" data-vis>
+      <figcaption class="mini">Holdet efter alder</figcaption>
+      <ol aria-label="Antal heste pr. alder: ${alle.map((a) => `${a} år: ${heste.filter((h) => h.alder === a).length}`).join(', ')}">${alle.map((a) => {
+        const n = heste.filter((h) => h.alder === a).length;
+        return `<li style="--h:${Math.round((n / max) * 100)}%"><b>${n}</b><i aria-hidden="true"></i><span>${a} år</span></li>`;
+      }).join('')}</ol>
+    </figure>`;
+};
+
 const heste = (o) => `
 ${sidehoved({
   sti: 'Heste',
   h1: 'Heste i træning',
   tekst: 'Træningslisten kommer direkte fra Dansk Hestevæddeløb og følger automatisk med, når heste kommer til eller rejser videre.',
-  figur: ['vinter', 'To heste med dækken i sneen'],
-  pos: '50% 45%',
-  chips: [[o.heste.length - o.ungheste.length, 'løbsheste'], [o.ungheste.length, 'ungheste']],
+  figur: ['hoe', 'To heste ved høet i stalden'],
+  pos: '50% 40%',
+  chips: [[o.heste.length - o.ungheste.length, 'løbsheste'], [o.ungheste.length, 'ungheste'], [`${(o.heste.reduce((s, h) => s + h.praemier, 0) / 1e6).toLocaleString('da-DK', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} mio.`, 'kr. indkørt i alt']],
 })}
+
+<section class="sek">
+  <div class="wrap duo duo--top">
+    <div>
+      ${etiket('Holdet', ' data-vis')}
+      <h2 data-vis style="--i:1">${o.heste.length} heste fra ${Math.min(...o.heste.map((h) => h.alder))} til ${Math.max(...o.heste.map((h) => h.alder))} år</h2>
+      <p class="indled" data-vis style="--i:2">Tilsammen har hestene på træningslisten kørt ${kr(o.heste.reduce((s, h) => s + h.praemier, 0))} ind i deres karrierer. ${o.ungheste.length ? `${o.ungheste.length} af dem er åringer og 2-årige på vej mod de første starter.` : ''}</p>
+    </div>
+    ${aldersgraf(o.heste)}
+  </div>
+</section>
+
+<section class="sek sek--sand2">
+  <div class="wrap">
+    ${sekhoved('Mest vindende', 'Staldens profiler', 'De heste på træningslisten, der har vundet flest løb i karrieren.')}
+    <div class="profiler">${[...o.heste].sort((a, b) => sejre(b) - sejre(a) || b.praemier - a.praemier).slice(0, 3).map(profilkort).join('')}
+    </div>
+  </div>
+</section>
 
 <section class="sek">
   <div class="wrap">
@@ -807,14 +930,22 @@ ${sidehoved({
 </section>
 ${kontaktbaand()}`;
 
+const sejrskort = (r, i) => `
+      <li data-vis style="--i:${i % 4}">
+        <time datetime="${r.dato}">${kortDato(r.dato)}</time>
+        <b>${esc(r.hest)}</b>
+        <span>${esc(bane(r.bane))} · ${r.loeb}. løb${tid(r.tid) ? ` · ${tid(r.tid)}` : ''}</span>
+        ${r.praemie ? `<em>${kr(r.praemie)}</em>` : ''}
+      </li>`;
+
 const resultater = (o, data) => `
 ${sidehoved({
   sti: 'Resultater',
   h1: 'Resultater',
-  tekst: `Staldens seneste starter, kommende løb og sæsonens tal. Data kommer fra Dansk Hestevæddeløb og er senest opdateret ${o.opdateret}.`,
-  figur: ['sne', 'Træning i sulky på gårdens bane i sne'],
-  pos: '55% 50%',
-  chips: [[o.saeson.sejre, `sejre i ${o.saeson.aar}`], [`${o.saeson.procent} %`, 'sejrsprocent']],
+  tekst: `Staldens seneste starter, kommende løb og sæsonens tal – fra Dansk Hestevæddeløb, opdateret ${o.opdateret}.`,
+  figur: ['ryttere', 'To ryttere på gårdens bane i sne'],
+  pos: '50% 55%',
+  chips: [[o.saeson.sejre, `sejre i ${o.saeson.aar}`], [`${o.saeson.procent} %`, 'sejrsprocent'], [`${nf(Math.round(o.saeson.praemier / 1000))}.000`, 'kr. indkørt']],
 })}
 
 <section class="sek">
@@ -838,21 +969,41 @@ ${sidehoved({
 <section class="sek sek--sand2">
   <div class="wrap resgitter">
     <div class="panel" data-vis>
+      <h2 class="mini">Kommende starter</h2>
+      ${o.kommende.length ? kommendeListe(o.kommende) : ingenStarter()}
+    </div>
+    <div class="panel" data-vis style="--i:1">
       <h2 class="mini">De seneste ${o.seneste.length} starter</h2>
       ${resultatliste(o.seneste)}
       <p class="note">Tider er kilometertider. a = autostart, g = galop undervejs. – = uplaceret, disk. = diskvalificeret.</p>
     </div>
-    <div class="panel" data-vis style="--i:1">
-      <h2 class="mini">Kommende starter</h2>
-      ${o.kommende.length ? kommendeListe(o.kommende) : ingenStarter()}
+  </div>
+</section>
+${o.sejreIAar.length ? `
+<section class="sek sek--blaek">
+  <div class="wrap">
+    ${sekhoved(`Vindere i ${o.saeson.aar}`, `${o.sejreIAar.length} sejre – ${o.sejreIAar.length === 1 ? 'én' : 'alle'} på én side`, `Hver sejr i sæsonen ${o.saeson.aar}, nyeste først.`)}
+    <ol class="sejrskort">${o.sejreIAar.map(sejrskort).join('')}
+    </ol>
+  </div>
+</section>` : ''}
+
+<section class="sek">
+  <div class="wrap duo">
+    <div>
+      ${etiket('Banerne', ' data-vis')}
+      <h2 data-vis style="--i:1">Sejre pr. bane i ${o.saeson.aar}</h2>
+      <p class="indled" data-vis style="--i:2">${baneTekst(o)}</p>
+      <div data-vis style="--i:3">${banebjaelker(o.sejrsbaner)}</div>
     </div>
+    ${banekort(o)}
   </div>
 </section>
 
-<section class="sek">
+<section class="sek sek--sand2">
   <div class="wrap">
     ${sekhoved('Statistik', 'Sæson for sæson', `Alle resultater og detaljer findes hos Dansk Hestevæddeløb. ${ekstern(SITE.travinfo, 'Åbn Travinfo')}`)}
-    <div class="duo duo--graf">${praemiegraf(o.praemieAar, o.saeson.aar)}${soejler('Sejre som træner', o.traenerAar)}</div>
+    <div class="duo duo--top">${praemiegraf(o.praemieAar, o.saeson.aar)}${soejler('Sejre som træner', o.traenerAar)}</div>
     <div class="tabeller" data-vis>
       ${statTabel(`${SITE.fornavn} som træner`, data.traenerStatistik)}
       ${statTabel(`${SITE.fornavn} som kusk`, data.kuskStatistik)}
@@ -861,13 +1012,13 @@ ${sidehoved({
 </section>
 ${kontaktbaand()}`;
 
-const kontakt = () => `
+const kontakt = (o) => `
 ${sidehoved({
   sti: 'Kontakt',
   h1: 'Kontakt',
   tekst: `Har du en hest, der skal i træning, eller et spørgsmål til stalden? Ring til ${SITE.fornavn} eller skriv en mail.`,
-  figur: ['pleje', 'En af staldens heste bliver striglet'],
-  pos: '50% 35%',
+  figur: ['skov', 'Træningsvej gennem skoven'],
+  pos: '50% 60%',
 })}
 
 <section class="sek">
@@ -882,17 +1033,36 @@ ${sidehoved({
       <p class="kontakt__stor kontakt__stor--mail"><a href="mailto:${SITE.email}">${SITE.email}</a></p>
       <p class="valg"><a class="knap" href="mailto:${SITE.email}">Skriv til ${SITE.fornavn} ${pil}</a></p>
     </div>
-    <div class="kontakt__felt kontakt__felt--kort" data-vis style="--i:2">
-      <div>
-        <h2 class="mini">Gården</h2>
-        <address class="kontakt__adr">${SITE.navn}<br>${SITE.gade}<br>${SITE.postnr} ${SITE.by}</address>
-        <p class="valg">${ekstern(SITE.kort, 'Find vej')}</p>
-        <p class="note">${SITE.firma} · CVR ${SITE.cvr}</p>
-      </div>
-      <div class="kort kort--mini">${danmarkskort([{ kode: HJEM, navn: 'Aalborg' }], 'Danmarkskort, hvor Aalborg er markeret')}</div>
-    </div>
   </div>
-</section>`;
+</section>
+
+<section class="sek sek--sand2">
+  <div class="wrap duo">
+    <div>
+      ${etiket('Besøg gården', ' data-vis')}
+      <h2 data-vis style="--i:1">${SITE.sted}</h2>
+      <address class="adresse__stor" data-vis style="--i:2">${SITE.navn}<br>${SITE.gade}<br>${SITE.postnr} ${SITE.by}</address>
+      <p class="valg" data-vis style="--i:3">${ekstern(SITE.kort, 'Find vej i Google Maps', 'knap')}</p>
+      <ol class="rute rute--lille" data-vis style="--i:4">
+        <li><b>30 min.</b><span>Aalborg Væddeløbsbane</span></li>
+        <li><b>5 km</b><span>Bakkelygård i Stae</span></li>
+        <li><b>1 time</b><span>Frederikshavn og Hirtshals</span></li>
+      </ol>
+    </div>
+    <figure class="kort" data-vis style="--i:2">${danmarkskort([{ kode: HJEM, navn: 'Aalborg' }], 'Danmarkskort, hvor Aalborg er markeret')}<figcaption>Aalborg er hjemmebanen – 30 minutter fra gården.</figcaption></figure>
+  </div>
+</section>
+
+<section class="sek">
+  <div class="wrap">
+    ${sekhoved('Priser', 'Træning pr. dag', 'Alle priser er ekskl. moms.')}
+    <ul class="priser" data-vis>${PRISER.map(([hvad, pris, note]) => `
+      <li><span>${hvad}</span><b>${pris}</b>${note ? `<small>${note}</small>` : ''}</li>`).join('')}
+    </ul>
+    <p class="note">${SITE.firma} · CVR ${SITE.cvr} · ${SITE.gade}, ${SITE.postnr} ${SITE.by}</p>
+  </div>
+</section>
+${fotostribe([['strand', 'Tre heste i træning på stranden'], ['solarie', 'Hest under solariet i laden'], ['hoe', 'To heste ved høet i stalden'], ['skovtur', 'Ridetur ad en skovsti set mellem hestens ører']])}`;
 
 const ikkeFundet = () => `
 <section class="sidehoved sidehoved--enkel">
@@ -943,7 +1113,7 @@ export function sider(data, { v, idag, kort }) {
     side('kontakt/', () => ({
       titel: `Kontakt ${SITE.person} – ${SITE.navn}`,
       beskrivelse: `Kontakt ${SITE.navn}: telefon ${SITE.telefon} eller ${SITE.email}. Gården ligger på ${SITE.gade}, ${SITE.postnr} ${SITE.by}.`,
-      indhold: kontakt(),
+      indhold: kontakt(o),
     })),
     side('404.html', () => ({
       titel: `Siden findes ikke | ${SITE.navn}`,
