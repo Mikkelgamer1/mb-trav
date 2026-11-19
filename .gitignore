@@ -1,0 +1,8 @@
+dist/
+node_modules/
+LANCERING.md
+
+.vercel
+.env*
+skitser/
+originaler/
