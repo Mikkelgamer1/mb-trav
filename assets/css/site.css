@@ -252,6 +252,10 @@ html:not(.er-scrollet) .forside .top { background: linear-gradient(180deg, rgba(
 .sti [aria-current] { color: #fff; }
 .sidehoved h1 { font-size: clamp(2.6rem, 6.4vw, 6.2rem); font-stretch: var(--bred); line-height: .92; text-transform: uppercase; letter-spacing: -.02em; }
 .sidehoved .indled { max-width: 600px; margin-top: clamp(12px, 1.6vw, 20px); color: rgba(255, 255, 255, .9); }
+/* Top med to billeder (pc og mobil): udsnittet sættes pr. billede */
+.sidehoved picture { display: contents; }
+.sidehoved picture .sidehoved__foto { object-position: var(--pos); }
+@media (max-width: 700px) { .sidehoved picture .sidehoved__foto { object-position: var(--pos-m, var(--pos)); } }
 /* Stablet sidehoved: på mobil står billedet øverst og teksten under på den mørke flade */
 @media (max-width: 700px) {
   .sidehoved--stablet { display: block; min-height: 0; }

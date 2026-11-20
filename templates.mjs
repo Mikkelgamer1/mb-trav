@@ -360,10 +360,19 @@ ${bund(o)}
 `;
 }
 
+// To billeder i samme top: ét til pc og ét (fx stående) til mobil. Hvert får sit eget udsnit.
+const mobilBillede = (figur, pos, [navn, mobilPos]) => {
+  const [, ...bredder] = BILLEDER[navn];
+  return `<picture>
+    <source media="(max-width: 700px)" srcset="${bredder.map((w) => `${R}assets/img/${navn}-${w}.webp ${w}w`).join(', ')}" sizes="100vw">
+    ${billede(figur[0], figur[1], { sizes: '100vw', lazy: false, cls: 'sidehoved__foto' }).replace('<img', `<img style="--pos:${pos};--pos-m:${mobilPos}"`)}
+  </picture>`;
+};
+
 // Sidehoved på undersider: foto i fuld bredde med overskriften nederst (som forsiden) og nøgletal i en stribe under.
-const sidehoved = ({ sti, h1, tekst, figur, pos = '50% 50%', chips = [], variant = '' }) => `
+const sidehoved = ({ sti, h1, tekst, figur, pos = '50% 50%', chips = [], variant = '', mobil }) => `
 <section class="sidehoved${variant ? ` sidehoved--${variant}` : ''}">
-  ${billede(figur[0], figur[1], { sizes: variant === 'portraet' ? '(min-width: 901px) 50vw, 100vw' : '100vw', lazy: false, cls: 'sidehoved__foto', pos })}
+  ${mobil ? mobilBillede(figur, pos, mobil) : billede(figur[0], figur[1], { sizes: '100vw', lazy: false, cls: 'sidehoved__foto', pos })}
   <div class="sidehoved__tekst">
     <nav class="sti" aria-label="Brødkrumme"><a href="${R}">Forside</a><span aria-hidden="true">/</span><span aria-current="page">${sti}</span></nav>
     <h1>${h1}</h1>
@@ -750,8 +759,9 @@ ${sidehoved({
   sti: 'Om Marc',
   h1: SITE.person,
   tekst: `Travtræner og kusk med ${esc(data.traener.licens)}-licens. Tidligere jockey – og siden 2016 med egen stald.`,
-  figur: ['soe', 'Hest og rytter svømmer i søen'],
+  figur: ['soe', ''], // pynt: navnet står i overskriften
   pos: '62% 100%',
+  mobil: ['marc', '50% 27%'], // Marc med fuksen (mbtrav.dk/hestepassere, 2017) – stående, så kun på mobil
   variant: 'stablet', // på mobil står teksten under billedet, så den ikke dækker svømmeren
   chips: [[o.heste.length, 'heste i træning'], [o.saeson.sejre, `sejre i ${o.saeson.aar}`], ['2016', 'egen stald siden']],
 })}
@@ -782,7 +792,7 @@ ${sidehoved({
     ${tidslinje(o)}
   </div>
 </section>
-${fotostribe([['marc', 'Marc Bæk Nielsen med en af staldens heste'], ['ryttere', 'To ryttere på banen i sne'], ['solopgang', 'Ryttere på banen i solopgang']])}
+${fotostribe([['skovtur', 'Ridetur ad en skovsti set mellem hestens ører'], ['ryttere', 'To ryttere på banen i sne'], ['solopgang', 'Ryttere på banen i solopgang']])}
 ${o.albatros ? `
 <section class="sek sek--blaek">
   <div class="wrap albatros">
