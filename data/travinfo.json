@@ -1,5 +1,5 @@
 {
- "opdateret": "2026-11-19T21:47:07.735Z",
+ "opdateret": "2026-11-20T10:06:34.464Z",
  "traener": {
   "foedt": 1993,
   "hjemmebane": "Spar Nord Arena Aalborg",
@@ -3822,6 +3822,22 @@
    "hestId": 658824,
    "hest": "Mauro Di Quattro (SE)",
    "kusk": "Freja Steffensen"
+  },
+  {
+   "dato": "2026-11-25",
+   "bane": "Åb",
+   "loeb": 2,
+   "hestId": 658747,
+   "hest": "Fortheloveofmoney (SE)",
+   "kusk": "Jeppe Juel"
+  },
+  {
+   "dato": "2026-11-25",
+   "bane": "Åb",
+   "loeb": 3,
+   "hestId": 657977,
+   "hest": "Red Madonna (SE)",
+   "kusk": "Jeppe Juel"
   }
  ]
 }
