@@ -31,3 +31,4 @@ Tekster rettes i `templates.mjs`, designet i `assets/css/site.css`.
 | Mainz er lillebror til Dortmund | travservice.dk, "Marc Bæk atter i fokus" (19.9.2026) |
 | Facebook og Instagram | facebook.com/mbtrav, instagram.com/mb.trav |
 | Fotos | Staldens egne billeder fra mbtrav.dk, kun skaleret ned |
+| Portrættet af Marc (Om Marc) | mbtrav.dk/hestepassere – billedet står under hans navn (uploadet 2017) |

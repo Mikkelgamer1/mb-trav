@@ -42,6 +42,7 @@ const BILLEDER = {
   skovtur: [0.75, 500, 960],
   rytter: [0.75, 500, 900],
   pleje: [0.83, 500, 900],
+  marc: [0.667, 800, 1400, 2200], // Marc med en af staldens heste – mbtrav.dk/hestepassere (billedet står under hans navn)
   udebokse: [0.749, 500, 750],
   ligeud: [1, 500, 960],
   sandbane: [0.75, 500, 720],
@@ -360,9 +361,9 @@ ${bund(o)}
 }
 
 // Sidehoved på undersider: foto i fuld bredde med overskriften nederst (som forsiden) og nøgletal i en stribe under.
-const sidehoved = ({ sti, h1, tekst, figur, pos = '50% 50%', chips = [] }) => `
-<section class="sidehoved">
-  ${billede(figur[0], figur[1], { sizes: '100vw', lazy: false, cls: 'sidehoved__foto', pos })}
+const sidehoved = ({ sti, h1, tekst, figur, pos = '50% 50%', chips = [], variant = '' }) => `
+<section class="sidehoved${variant ? ` sidehoved--${variant}` : ''}">
+  ${billede(figur[0], figur[1], { sizes: variant === 'portraet' ? '(min-width: 901px) 50vw, 100vw' : '100vw', lazy: false, cls: 'sidehoved__foto', pos })}
   <div class="sidehoved__tekst">
     <nav class="sti" aria-label="Brødkrumme"><a href="${R}">Forside</a><span aria-hidden="true">/</span><span aria-current="page">${sti}</span></nav>
     <h1>${h1}</h1>
@@ -749,8 +750,9 @@ ${sidehoved({
   sti: 'Om Marc',
   h1: SITE.person,
   tekst: `Travtræner og kusk med ${esc(data.traener.licens)}-licens. Tidligere jockey – og siden 2016 med egen stald.`,
-  figur: ['fold', 'Travhest på folden'],
-  pos: '50% 24%',
+  figur: ['marc', 'Marc Bæk Nielsen med en af staldens heste'],
+  pos: '50% 34%',
+  variant: 'portraet', // stående foto: på pc i højre halvdel, på mobil i fuld bredde
   chips: [[o.heste.length, 'heste i træning'], [o.saeson.sejre, `sejre i ${o.saeson.aar}`], ['2016', 'egen stald siden']],
 })}
 
