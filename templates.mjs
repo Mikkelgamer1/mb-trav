@@ -476,10 +476,10 @@ const praemiegraf = (aar, nu) => {
       <svg viewBox="0 0 500 230" role="img" aria-label="Indkørte præmier pr. sæson: ${aar.map((s) => `${s.aar}: ${nf(s.praemier)} kr.`).join(', ')}">${aar.map((s, i) => {
         const h = Math.max(4, Math.round((s.praemier / max) * 170)), x = Math.round(i * b + b * 0.16), w = Math.round(b * 0.68);
         return `
-        <g${s.aar === nu ? ' class="graf__nu"' : ''}><rect x="${x}" y="${196 - h}" width="${w}" height="${h}" style="--i:${i}"/><text x="${x + w / 2}" y="${186 - h}" text-anchor="middle">${nf(Math.round(s.praemier / 1000))}</text><text class="graf__aar" x="${x + w / 2}" y="${222}" text-anchor="middle">${s.aar}</text></g>`;
+        <g${s.aar === nu ? ' class="graf__nu"' : ''}><rect x="${x}" y="${196 - h}" width="${w}" height="${h}" style="--i:${i}"/><text x="${x + w / 2}" y="${186 - h}" text-anchor="middle">${nf(s.praemier)}</text><text class="graf__aar" x="${x + w / 2}" y="${222}" text-anchor="middle">${s.aar}</text></g>`;
       }).join('')}
       </svg>
-      <figcaption>Indkørte præmier for staldens heste pr. sæson, i 1.000 kr.${aar.some((s) => s.aar === nu) ? ` ${nu} er til og med i dag.` : ''}</figcaption>
+      <figcaption>Indkørte præmier for staldens heste pr. sæson, i kroner.${aar.some((s) => s.aar === nu) ? ` ${nu} er til og med i dag.` : ''}</figcaption>
     </figure>`;
 };
 
