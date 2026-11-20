@@ -585,89 +585,87 @@ html:not(.er-scrollet) .forside .top { background: linear-gradient(180deg, rgba(
 }
 
 /* ==========================================================================
-   Look "Lys" (20.11.2026): lyst og luftigt i samme ånd som Stald Magnus' side – serif-overskrifter med kursiv slutning,
-   bløde blå toninger, hvide kort og fotos med en blålig skygge, mørkeblå bånd ind imellem. Forsidens top er uændret.
+ Look "Nat" (valgt 19.11.2026): mørkt og eksklusivt. Elfenben på natblå, serif-overskrifter og tynde tal, isblå accent. 
    ========================================================================== */
 @font-face { font-family: Newsreader; src: url(../fonts/newsreader.woff2) format('woff2'); font-weight: 300 700; font-display: swap; }
 @font-face { font-family: Newsreader; font-style: italic; src: url(../fonts/newsreader-kursiv.woff2) format('woff2'); font-weight: 300 700; font-display: swap; }
 
 :root {
-  --sand: #ffffff;
-  --sand2: #f4f7fc;
-  --papir: #ffffff;
-  --linje: #dde3ec;
-  --tekst: #111a2b;
-  --moerk: #0e1830;
-  --blaek2: #0a1226;
-  --graa: #5b6779;
-  --hav: #2f5fa0;
-  --hav-lys: #a9c4ec;
-  --lys-kant: #e6edf8;
+  --sand: #0b111c;
+  --sand2: #0f1726;
+  --papir: #131d30;
+  --linje: rgba(236, 231, 221, .13);
+  --tekst: #ece7dd;
+  --moerk: #060a12;
+  --blaek2: #04070d;
+  --graa: #9aa3b1;
+  --hav: #a9c8ec;
+  --hav-lys: #a9c8ec;
   --overskrift: Newsreader, Georgia, serif;
-  --skygge: 0 18px 34px -18px rgba(47, 95, 160, .5), 0 3px 8px -3px rgba(14, 24, 48, .14);
+  --tal: Newsreader, Georgia, serif;
 }
-body { background: #fff; }
-
-/* Overskrifter: serif, sidste del i kursiv */
-h1, h2, h3 { font-weight: 400; font-stretch: 100%; letter-spacing: -.012em; }
-h2 { font-size: clamp(2.3rem, 4.6vw, 4rem); line-height: 1; }
-h1 em, h2 em { font-style: italic; }
+body { background: var(--sand); }
+h1, h2, h3 { font-weight: 400; font-stretch: 100%; letter-spacing: -.015em; }
+h2 { font-size: clamp(2.4rem, 5vw, 4.4rem); line-height: 1.02; }
 h3 { font-weight: 500; }
-.indled { font-family: Newsreader, Georgia, serif; font-size: clamp(1.2rem, 1.6vw, 1.42rem); line-height: 1.5; }
+.etiket { letter-spacing: .3em; }
+.etiket::before { width: 44px; height: 1px; }
+.sek { padding-block: clamp(80px, 10vw, 150px); }
+.sekhoved p, .intro p, .kontakt__felt--fuld p, .tidslinje__punkt p, .sidehoved .indled { color: rgba(236, 231, 221, .72); }
+.indled { font-family: Newsreader, serif; font-size: clamp(1.25rem, 1.7vw, 1.5rem); font-weight: 300; line-height: 1.5; }
 
-/* Lyse afsnit med bløde blå toninger i kanterne (som Magnus) */
-.sek:not(.sek--blaek):not(.opdraet):not(.sek--sand2) { background: radial-gradient(1100px 520px at 0% 0%, var(--lys-kant), transparent 70%), radial-gradient(900px 520px at 100% 100%, var(--lys-kant), transparent 70%), #fff; }
-.sek--sand2 { background: radial-gradient(1200px 640px at 100% 0%, #dbe5f5, transparent 70%), var(--sand2); }
-.sekhoved p, .intro p, .kontakt__felt--fuld p, .tidslinje__punkt p { color: #3d4859; }
-.stribe { background: #fff; border-color: var(--linje); }
-
-/* Tal i serif */
+/* Tal i tynd serif */
 .tal dd, .chips dd, .stribe__tal dd, .kpi dd, .facil b, .rute b, .faktagitter dd:not(.lille), .priser b, .tidslinje__punkt b, .aarskort__aar h3, .albatros__tal b, .mini-tal dd, .facilkort b, .afstande b, .cta__valg, .kontakt__stor, .adresse__stor {
-  font-family: var(--overskrift); font-weight: 400; font-stretch: 100%; letter-spacing: -.015em;
+  font-family: var(--tal); font-weight: 300; font-stretch: 100%; letter-spacing: -.02em;
 }
-.sidehoved h1, .albatros h2, .klubber h3, .gruppe__titel { font-family: var(--overskrift); font-weight: 400; font-stretch: 100%; text-transform: none; letter-spacing: -.02em; }
-.sidehoved h1 { font-size: clamp(3rem, 7.4vw, 7rem); line-height: .95; }
-.gruppe__titel { font-size: clamp(2.2rem, 4vw, 3.2rem); border-bottom-width: 1px; }
-.klubber h3 { font-size: clamp(1.8rem, 2.8vw, 2.4rem); }
-.tal, .facil, .rute, .chips, .meritter, .kpi, .adresse { border-top-width: 1px; }
+.tal dd { font-size: clamp(3rem, 6vw, 5.4rem); }
+.albatros__tal b { font-size: clamp(8rem, 18vw, 15rem); }
+.sidehoved h1, .albatros h2, .klubber h3, .gruppe__titel { font-family: var(--overskrift); font-weight: 400; font-stretch: 100%; text-transform: none; letter-spacing: -.025em; }
+.sidehoved h1 { font-size: clamp(3.2rem, 8vw, 7.6rem); line-height: .95; }
+.gruppe__titel { font-size: clamp(2.2rem, 4vw, 3.4rem); }
+.klubber h3 { font-size: clamp(1.9rem, 3vw, 2.6rem); }
 
-/* Hvide kort og fotos med blålig skygge */
-.panel, .profil, .priser li, .aarskort__aar, .tidslinje__punkt, .faktagitter, .kontakt__felt, .afstande p, .fakta, .baner li, .navnechips li, .sociale a { background: #fff; box-shadow: var(--skygge); border-top: 0; }
-.faktagitter { gap: 0; border: 0; background: #fff; }
-.faktagitter div { background: #fff; border-right: 1px solid var(--linje); border-bottom: 1px solid var(--linje); }
-.profil { border-left: 3px solid var(--hav); }
-.profil:hover { transform: translateY(-3px); }
-.tidslinje__punkt--stor { background: var(--moerk); }
-.tidslinje__punkt--stor p { color: rgba(255, 255, 255, .8); }
-.fotopar, .fotostribe { padding-inline: var(--kant); gap: 16px; background: transparent; }
-.fotopar img, .fotostribe img, .facilkort figure, .trio img, .galleri img, .duo__foto img, .prosa__foto img { box-shadow: var(--skygge); }
-.sek--blaek .galleri img, .sek--blaek .trio img { box-shadow: 0 18px 34px -18px rgba(0, 0, 0, .7); }
-
-/* Træningslisten som hvide kort med blå kant (som Magnus) */
-.hesteliste { display: grid; gap: 10px; margin-top: 18px; }
-.hest { padding: 16px 24px 16px 21px; background: #fff; border: 0; border-left: 3px solid var(--hav); box-shadow: 0 14px 30px -20px rgba(47, 95, 160, .55); }
-.hest:hover { border-left-color: var(--tekst); }
-.liste__filtre [aria-pressed="true"] { background: var(--moerk); }
-
-/* Mørke bånd */
+/* Linjer og flader */
+.tal, .facil, .rute, .chips, .gruppe__titel, .meritter, .kpi, .adresse { border-top-width: 1px; border-color: rgba(236, 231, 221, .3); }
+.soejler ol, .alder ol, .maaned ol, .tabel thead th { border-color: rgba(236, 231, 221, .3); }
+.panel, .profil, .priser li, .aarskort__aar, .tidslinje__punkt, .faktagitter div, .kontakt__felt, .afstande p, .fakta { background: var(--papir); }
+.profil, .priser li, .aarskort__aar { border-top: 1px solid var(--hav); }
+.tidslinje__punkt { border-top: 1px solid var(--linje); }
+.tidslinje__punkt--stor { background: #16233a; border-color: var(--hav); }
+.faktagitter { background: var(--linje); border-color: var(--linje); }
+.knap { background: var(--tekst); color: #0b111c; }
+.knap:hover { background: var(--hav); }
+.knap--kant { background: none; color: inherit; }
+.knap--kant:hover { background: rgba(236, 231, 221, .1); }
+.link:hover { color: #fff; }
+.pl { box-shadow: inset 0 0 0 1px var(--linje); }
+.pl--1 { background: var(--hav); color: #0b111c; }
+.pl--23 { box-shadow: inset 0 0 0 1.5px var(--tekst); }
+.kom time { background: var(--hav); color: #0b111c; }
 .sek--blaek { background: var(--moerk); }
-.opdraet { background-color: var(--moerk); }
-.kontakt__felt--moerk { background: var(--moerk); }
-.kom time { background: var(--moerk); }
-.pl--1 { background: var(--hav); }
-
-/* Kontaktbåndet: centreret som hos Magnus */
-.cta { text-align: center; background: radial-gradient(900px 420px at 50% 0%, #1b2c52, transparent 70%), var(--moerk); }
-.cta .etiket { justify-content: center; }
-.cta h2 { margin-inline: auto; max-width: 18ch; font-size: clamp(2.6rem, 6vw, 5rem); }
-.cta__tekst { margin-inline: auto; }
-.cta__valg { justify-content: center; }
-.cta__valg a { border-bottom-width: 1px; }
 
 /* Grafer og kort */
-.graf rect, .soejler li i, .maaned__s { fill: #d5deeb; background: #d5deeb; }
-.maaned__tegn--s { background: #d5deeb; }
-.baner li::before { background: #e3ebf7; }
-.kort__land { fill: #e7edf6; stroke: #cfd8e6; }
-.sek--sand2 .kort__land { fill: #fff; }
-.kort__navn { stroke: #fff; }
+.graf rect, .soejler li i, .maaned__s { fill: rgba(236, 231, 221, .16); background: rgba(236, 231, 221, .16); }
+.graf .graf__nu rect, .soejler li:last-child i { fill: var(--hav); background: var(--hav); }
+.graf text { fill: var(--tekst); }
+.maaned__tegn--s { background: rgba(236, 231, 221, .16); }
+.baner li::before { background: rgba(169, 200, 236, .16); }
+.kort__land, .sek--sand2 .kort__land { fill: #1a2539; stroke: rgba(236, 231, 221, .16); }
+.kort__navn { stroke: var(--sand); }
+.kort__ring { stroke: var(--tekst); }
+.kort__tal { fill: #0b111c; }
+
+/* Kontaktbåndet bliver et fotobånd */
+.cta { background: linear-gradient(180deg, rgba(6, 10, 18, .78), rgba(6, 10, 18, .92)), url(../img/vand-2200.webp) center 55% / cover; }
+.cta h2 { font-size: clamp(2.6rem, 6vw, 5.4rem); }
+.cta__valg a { border-bottom-width: 1px; }
+.stribe { border-color: var(--linje); }
+.liste__filtre button { box-shadow: inset 0 0 0 1px var(--linje); }
+.liste__filtre [aria-pressed="true"] { background: var(--tekst); color: #0b111c; }
+.liste__filtre [aria-pressed="true"] span { color: #44505f; }
+.liste__sorter select { color: var(--tekst); background-color: var(--papir); border-color: var(--linje); }
+.sociale a { background: var(--sand2); }
+.sociale a:hover { background: #1a2539; }
+.sociale a > svg:first-child { background: var(--hav); color: #0b111c; }
+.trio figcaption { background: var(--tekst); color: #0b111c; }
+.opdraet { background-color: #070c15; }
