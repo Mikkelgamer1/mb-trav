@@ -243,7 +243,7 @@ const kontaktbaand = () => `
 <section class="cta">
   <div class="wrap">
     ${etiket('Kontakt', ' data-vis')}
-    <h2 data-vis style="--i:1">Har du en hest, der skal i træning?</h2>
+    <h2 data-vis style="--i:1">Har du en hest, <em>der skal i træning?</em></h2>
     <p class="cta__tekst" data-vis style="--i:2">Ring til ${SITE.fornavn} eller skriv en mail – så tager I en snak om hesten, planen og prisen.</p>
     <p class="cta__valg" data-vis style="--i:3"><a href="tel:${tlfLink}"><span class="sr">Ring til ${SITE.fornavn}: </span>${SITE.telefon}</a><a href="mailto:${SITE.email}">${SITE.email}</a></p>
   </div>
@@ -327,7 +327,7 @@ function layout({ sti, titel, beskrivelse, indhold, o, klasse = '', noindex = fa
 <title>${esc(titel)}</title>
 <meta name="description" content="${esc(beskrivelse)}">
 ${noindex ? '<meta name="robots" content="noindex">' : '<link rel="canonical" href="' + kanonisk + '">'}
-<meta name="theme-color" content="#0b111c">
+<meta name="theme-color" content="#ffffff">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="da_DK">
 <meta property="og:site_name" content="${SITE.navn}">
@@ -573,7 +573,7 @@ const sekhoved = (etik, h2, tekst = '') => `
 const opdraet = (o) => (o.opdraet.length ? `
 <section class="sek opdraet">
   <div class="wrap">
-    ${sekhoved('Eget opdræt', 'Holdet med fodboldnavne', `Sammen med Team Bakkelygaard opdrætter ${SITE.fornavn} selv heste – og de får navne efter fodboldklubber. Fra opdrættet er bl.a. kommet Dortmund, Celtic og Benfica. Lige nu står ${o.opdraet.length} på træningslisten.`)}
+    ${sekhoved('Eget opdræt', 'Holdet med <em>fodboldnavne</em>', `Sammen med Team Bakkelygaard opdrætter ${SITE.fornavn} selv heste – og de får navne efter fodboldklubber. Fra opdrættet er bl.a. kommet Dortmund, Celtic og Benfica. Lige nu står ${o.opdraet.length} på træningslisten.`)}
     <ol class="klubber">${o.opdraet.map((h, i) => `
       <li data-vis style="--i:${i % 3}">
         <span class="klubber__nr" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
@@ -638,7 +638,7 @@ const forside = (o) => `
 <section class="sek">
   <div class="wrap">
     ${etiket(`Sæsonen ${o.saeson.aar}`, ' data-vis')}
-    <h2 data-vis style="--i:1">Stalden i tal</h2>
+    <h2 data-vis style="--i:1">Stalden <em>i tal</em></h2>
     <dl class="tal" data-vis style="--i:2">
       <div><dt>heste i træning</dt><dd data-tael="${o.heste.length}">${o.heste.length}</dd></div>
       <div><dt>sejre i ${o.saeson.aar}</dt><dd data-tael="${o.saeson.sejre}">${o.saeson.sejre}</dd></div>
@@ -663,7 +663,7 @@ const forside = (o) => `
 
 <section class="sek">
   <div class="wrap">
-    ${sekhoved('Resultater', 'Fra banen', `Staldens næste starter og seneste resultater – hentet fra Dansk Hestevæddeløb hver dag, senest ${o.opdateret}.`)}
+    ${sekhoved('Resultater', 'Seneste <em>fra banen</em>', `Staldens næste starter og seneste resultater – hentet fra Dansk Hestevæddeløb hver dag, senest ${o.opdateret}.`)}
     <div class="resgitter">
       <div class="panel" data-vis>
         <h3 class="mini">Kommende starter</h3>
@@ -682,7 +682,7 @@ const forside = (o) => `
 
 <section class="sek sek--sand2">
   <div class="wrap">
-    ${sekhoved('Hestene', 'Holdet lige nu', `${o.heste.length} heste står på træningslisten${o.ungheste.length ? ` – heraf ${o.ungheste.length} ungheste på vej` : ''}. Her er de mest vindende.`)}
+    ${sekhoved('Hestene', 'Holdet <em>lige nu</em>', `${o.heste.length} heste står på træningslisten${o.ungheste.length ? ` – heraf ${o.ungheste.length} ungheste på vej` : ''}. Her er de mest vindende.`)}
     <div class="profiler">${[...o.heste].sort((a, b) => sejre(b) - sejre(a) || b.praemier - a.praemier).slice(0, 6).map(profilkort).join('')}
     </div>
     <p class="midt" data-vis>${knap('heste/', `Hele træningslisten (${o.heste.length})`)}</p>
@@ -691,7 +691,7 @@ const forside = (o) => `
 
 <section class="sek">
   <div class="wrap">
-    ${sekhoved(`Gården i ${SITE.sted}`, 'Faciliteterne', 'Træningen tager udgangspunkt i gården: egen travbane, galopbane med strandsand, ridebane og folde – og 30 minutters kørsel til Aalborg Væddeløbsbane.')}
+    ${sekhoved(`Gården i ${SITE.sted}`, 'Gården <em>og banerne</em>', 'Træningen tager udgangspunkt i gården: egen travbane, galopbane med strandsand, ridebane og folde – og 30 minutters kørsel til Aalborg Væddeløbsbane.')}
     ${faciliteter()}
     <p class="valg" data-vis>${link('stalden/', 'Mere om stalden og priserne')}</p>
   </div>
@@ -699,7 +699,7 @@ const forside = (o) => `
 
 <section class="sek sek--blaek">
   <div class="wrap">
-    ${sekhoved('Hverdagen', 'Bane, strand, sø og skov')}
+    ${sekhoved('Hverdagen', 'Bane, strand, <em>sø og skov</em>')}
     ${galleri(GALLERI.slice(0, 6), ' galleri--forside')}
   </div>
 </section>
@@ -708,7 +708,7 @@ const forside = (o) => `
   <div class="wrap duo">
     <div>
       ${etiket('Banerne', ' data-vis')}
-      <h2 data-vis style="--i:1">Hjemme i Aalborg – ude i hele landet</h2>
+      <h2 data-vis style="--i:1">Hjemme i Aalborg – <em>ude i hele landet</em></h2>
       <p class="indled" data-vis style="--i:2">${baneTekst(o)}</p>
       <div data-vis style="--i:3">${banebjaelker(o.sejrsbaner)}</div>
     </div>
@@ -770,7 +770,7 @@ ${sidehoved({
   <div class="wrap intro">
     <div>
       ${etiket('Historien', ' data-vis')}
-      <h2 data-vis style="--i:1">Fra jockey til træner</h2>
+      <h2 data-vis style="--i:1">Fra jockey <em>til træner</em></h2>
       <p class="indled" data-vis style="--i:2">${SITE.fornavn} kom som 12-årig i stalden hos Bo Westergaard og Peter Jensen på Vang Hovedgaard og fik amatørlicens som 16-årig. Som jockey vandt han DM for jockeyer i 2012 og 2015 – og i september 2016 startede han ${SITE.navn}.</p>
       <p data-vis style="--i:3">Hestene trænes fra gården i ${SITE.sted} med egen travbane, galopbane med strandsand og folde, mens unghestene står på Bakkelygård i Stae. ${SITE.fornavn} kører også selv – i ${o.kusk.aar} er det blevet til ${o.kusk.starter} starter og ${sejreTekst(o.kusk.sejre)} i sulkyen. Han er medlem af Dansk Travtrænerforening af 1909.</p>
       <p class="valg" data-vis style="--i:4">${ekstern(SITE.travinfo, `${SITE.fornavn}s profil på Travinfo`)}</p>
@@ -788,7 +788,7 @@ ${sidehoved({
 
 <section class="sek sek--sand2">
   <div class="wrap">
-    ${sekhoved('Karrieren', 'Årene, der tæller', 'Udvalgte højdepunkter fra meritlisten – og sæsonen, hvor stalden rundede en million.')}
+    ${sekhoved('Karrieren', 'Årene, <em>der tæller</em>', 'Udvalgte højdepunkter fra meritlisten – og sæsonen, hvor stalden rundede en million.')}
     ${tidslinje(o)}
   </div>
 </section>
@@ -825,14 +825,14 @@ ${o.albatros ? `
 ${opdraet(o)}
 <section class="sek">
   <div class="wrap">
-    ${sekhoved('Meritter', 'Udvalgte resultater 2016–2021', `Fra ${SITE.fornavn}s egen meritliste – ${MERITTER.length} resultater på seks sæsoner.`)}
+    ${sekhoved('Meritter', 'Udvalgte resultater <em>2016–2021</em>', `Fra ${SITE.fornavn}s egen meritliste – ${MERITTER.length} resultater på seks sæsoner.`)}
     ${aarskort()}
   </div>
 </section>
 
 <section class="sek sek--sand2">
   <div class="wrap">
-    ${sekhoved('Statistik', 'Sæson for sæson', `Officielle tal fra Dansk Hestevæddeløb, opdateret ${o.opdateret}.`)}
+    ${sekhoved('Statistik', 'Sæson <em>for sæson</em>', `Officielle tal fra Dansk Hestevæddeløb, opdateret ${o.opdateret}.`)}
     <div class="duo duo--top">${praemiegraf(o.praemieAar, o.saeson.aar)}
       <div class="soejlepar">
         ${soejler('Sejre som træner', o.traenerAar)}
@@ -869,7 +869,7 @@ ${sidehoved({
 
 <section class="sek">
   <div class="wrap">
-    ${sekhoved(`Gården i ${SITE.sted}`, 'Faciliteterne', 'Egen travbane med dobbeltsporet ligeudbane, galopbane med strandsand, ridebane, stald, lade og store folde.')}
+    ${sekhoved(`Gården i ${SITE.sted}`, 'Gården <em>og banerne</em>', 'Egen travbane med dobbeltsporet ligeudbane, galopbane med strandsand, ridebane, stald, lade og store folde.')}
     <ul class="facilkort">${FACILKORT.map(([navn, alt, tal, titel, tekst], i) => `
       <li data-vis style="--i:${i % 3}">
         <figure>${billede(navn, alt, { sizes: '(min-width: 900px) 30vw, (min-width: 560px) 46vw, 92vw' })}</figure>
@@ -883,7 +883,7 @@ ${sidehoved({
 
 <section class="sek sek--blaek">
   <div class="wrap">
-    ${sekhoved('Ud af stalden', 'Strand, sø og skov', 'Ud over gårdens egne baner trænes hestene også på stranden, i søen og ad skovvejene.')}
+    ${sekhoved('Ud af stalden', 'Strand, <em>sø og skov</em>', 'Ud over gårdens egne baner trænes hestene også på stranden, i søen og ad skovvejene.')}
     <div class="trio">
       <figure data-vis>${billede('strand', 'Tre heste i træning på stranden', { sizes: '(min-width: 900px) 50vw, 92vw' })}<figcaption>Stranden</figcaption></figure>
       <figure data-vis style="--i:1">${billede('vand', 'Hest i vandet ved søen', { sizes: '(min-width: 900px) 25vw, 92vw' })}<figcaption>Søen</figcaption></figure>
@@ -894,7 +894,7 @@ ${sidehoved({
 
 <section class="sek">
   <div class="wrap">
-    ${sekhoved('Beliggenhed', 'Tæt på det hele', `Gården ligger i ${SITE.sted} i Nordjylland.`)}
+    ${sekhoved('Beliggenhed', 'Tæt på <em>det hele</em>', `Gården ligger i ${SITE.sted} i Nordjylland.`)}
     <ol class="rute" data-vis>
       <li><b>20 min.</b><span>Happy Horse Spa &amp; Rehab</span><small>spa og vandbånd</small></li>
       <li><b>30 min.</b><span>Aalborg Væddeløbsbane</span><small>hjemmebanen</small></li>
@@ -908,7 +908,7 @@ ${sidehoved({
     <figure class="duo__foto" data-vis>${billede('fold', 'Travhest på folden', { sizes: '(min-width: 901px) 46vw, 92vw' })}</figure>
     <div>
       ${etiket('Unghestene', ' data-vis')}
-      <h2 data-vis style="--i:1">Bakkelygård i Stae</h2>
+      <h2 data-vis style="--i:1">Bakkelygård <em>i Stae</em></h2>
       <p class="indled" data-vis style="--i:2">Unghestene står på Bakkelygård i Stae, ca. 5 km fra gården i ${SITE.sted}. Her er fine stalde, folde og træningsfaciliteter.</p>
       <dl class="chips chips--lille" data-vis style="--i:3">
         <div><dt>bane</dt><dd>2.200 m</dd></div>
@@ -923,7 +923,7 @@ ${sidehoved({
 
 <section class="sek">
   <div class="wrap">
-    ${sekhoved('Priser', 'Hvad koster det?', `Alle priser er ekskl. moms. Ring til ${SITE.fornavn} for en snak om netop din hest.`)}
+    ${sekhoved('Priser', 'Hvad <em>koster det?</em>', `Alle priser er ekskl. moms. Ring til ${SITE.fornavn} for en snak om netop din hest.`)}
     <ul class="priser" data-vis>${PRISER.map(([hvad, pris, note]) => `
       <li><span>${hvad}</span><b>${pris}</b>${note ? `<small>${note}</small>` : ''}</li>`).join('')}
     </ul>
@@ -932,7 +932,7 @@ ${sidehoved({
 
 <section class="sek sek--blaek">
   <div class="wrap">
-    ${sekhoved('Hverdagen', 'Billeder fra stalden')}
+    ${sekhoved('Hverdagen', 'Billeder <em>fra stalden</em>')}
     ${galleri()}
   </div>
 </section>
@@ -995,7 +995,7 @@ ${sidehoved({
 
 <section class="sek sek--sand2">
   <div class="wrap">
-    ${sekhoved('Mest vindende', 'Staldens profiler', 'De heste på træningslisten, der har vundet flest løb i karrieren.')}
+    ${sekhoved('Mest vindende', 'Staldens <em>profiler</em>', 'De heste på træningslisten, der har vundet flest løb i karrieren.')}
     <div class="profiler">${[...o.heste].sort((a, b) => sejre(b) - sejre(a) || b.praemier - a.praemier).slice(0, 3).map(profilkort).join('')}
     </div>
   </div>
@@ -1079,7 +1079,7 @@ ${o.sejreIAar.length ? `
   <div class="wrap duo">
     <div>
       ${etiket('Banerne', ' data-vis')}
-      <h2 data-vis style="--i:1">Sejre pr. bane i ${o.saeson.aar}</h2>
+      <h2 data-vis style="--i:1">Sejre pr. bane <em>i ${o.saeson.aar}</em></h2>
       <p class="indled" data-vis style="--i:2">${baneTekst(o)}</p>
       <div data-vis style="--i:3">${banebjaelker(o.sejrsbaner)}</div>
     </div>
@@ -1089,7 +1089,7 @@ ${o.sejreIAar.length ? `
 
 <section class="sek sek--sand2">
   <div class="wrap">
-    ${sekhoved('Statistik', 'Sæson for sæson', `Alle resultater og detaljer findes hos Dansk Hestevæddeløb. ${ekstern(SITE.travinfo, 'Åbn Travinfo')}`)}
+    ${sekhoved('Statistik', 'Sæson <em>for sæson</em>', `Alle resultater og detaljer findes hos Dansk Hestevæddeløb. ${ekstern(SITE.travinfo, 'Åbn Travinfo')}`)}
     <div class="duo duo--top">${praemiegraf(o.praemieAar, o.saeson.aar)}${soejler('Sejre som træner', o.traenerAar)}</div>
     <div class="tabeller" data-vis>
       ${statTabel(`${SITE.fornavn} som træner`, data.traenerStatistik)}
@@ -1149,7 +1149,7 @@ ${sidehoved({
 
 <section class="sek">
   <div class="wrap">
-    ${sekhoved('Priser', 'Træning pr. dag', 'Alle priser er ekskl. moms.')}
+    ${sekhoved('Priser', 'Træning <em>pr. dag</em>', 'Alle priser er ekskl. moms.')}
     <ul class="priser" data-vis>${PRISER.map(([hvad, pris, note]) => `
       <li><span>${hvad}</span><b>${pris}</b>${note ? `<small>${note}</small>` : ''}</li>`).join('')}
     </ul>
