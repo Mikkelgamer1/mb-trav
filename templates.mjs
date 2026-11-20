@@ -26,7 +26,7 @@ export const SITE = {
 // Billeder: navn → [forhold, bredder…]. Alle er staldens egne fotos fra mbtrav.dk – kun skaleret ned, aldrig op.
 const BILLEDER = {
   strand: [1.873, 800, 1400, 2200],
-  soe: [1.5, 700, 1200, 1800],
+  soe: [1.5, 700, 1200, 1800, 2200],
   sne: [1.5, 700, 1200, 1600, 2200],
   fold: [1.5, 700, 1200, 1600, 2200],
   hoe: [1.5, 600, 1000, 1600, 2200],
@@ -35,7 +35,7 @@ const BILLEDER = {
   solopgang: [1, 500, 900],
   ryttere: [1.205, 600, 1000, 1600, 2200],
   staende: [0.926, 500, 900],
-  vand: [1.5, 700, 1200],
+  vand: [1.5, 700, 1200, 1600, 2200],
   stald: [1.905, 600, 960],
   vinter: [0.667, 500, 900],
   bokse: [0.915, 600, 878],
@@ -750,9 +750,9 @@ ${sidehoved({
   sti: 'Om Marc',
   h1: SITE.person,
   tekst: `Travtræner og kusk med ${esc(data.traener.licens)}-licens. Tidligere jockey – og siden 2016 med egen stald.`,
-  figur: ['marc', 'Marc Bæk Nielsen med en af staldens heste'],
-  pos: '50% 34%',
-  variant: 'portraet', // stående foto: på pc i højre halvdel, på mobil i fuld bredde
+  figur: ['soe', 'Hest og rytter svømmer i søen'],
+  pos: '62% 100%',
+  variant: 'stablet', // på mobil står teksten under billedet, så den ikke dækker svømmeren
   chips: [[o.heste.length, 'heste i træning'], [o.saeson.sejre, `sejre i ${o.saeson.aar}`], ['2016', 'egen stald siden']],
 })}
 
@@ -782,7 +782,7 @@ ${sidehoved({
     ${tidslinje(o)}
   </div>
 </section>
-${fotostribe([['soe', 'Hest og hjælper svømmer i søen'], ['ryttere', 'To ryttere på banen i sne'], ['solopgang', 'Ryttere på banen i solopgang']])}
+${fotostribe([['marc', 'Marc Bæk Nielsen med en af staldens heste'], ['ryttere', 'To ryttere på banen i sne'], ['solopgang', 'Ryttere på banen i solopgang']])}
 ${o.albatros ? `
 <section class="sek sek--blaek">
   <div class="wrap albatros">

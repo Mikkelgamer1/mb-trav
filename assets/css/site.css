@@ -252,12 +252,12 @@ html:not(.er-scrollet) .forside .top { background: linear-gradient(180deg, rgba(
 .sti [aria-current] { color: #fff; }
 .sidehoved h1 { font-size: clamp(2.6rem, 6.4vw, 6.2rem); font-stretch: var(--bred); line-height: .92; text-transform: uppercase; letter-spacing: -.02em; }
 .sidehoved .indled { max-width: 600px; margin-top: clamp(12px, 1.6vw, 20px); color: rgba(255, 255, 255, .9); }
-/* Stående portræt: på pc i højre halvdel, med teksten på den mørke flade til venstre */
-@media (min-width: 901px) {
-  .sidehoved--portraet .sidehoved__foto { left: auto; width: 52%; }
-  .sidehoved--portraet::after { background: linear-gradient(90deg, var(--moerk) 0, var(--moerk) 48%, rgba(6, 10, 18, .55) 56%, rgba(6, 10, 18, 0) 70%), linear-gradient(180deg, rgba(6, 10, 18, .5) 0, rgba(6, 10, 18, 0) 22%); }
-  .sidehoved.sidehoved--portraet h1 { font-size: clamp(3rem, 5vw, 5.6rem); }
-  .sidehoved--portraet .indled { max-width: 44%; }
+/* Stablet sidehoved: på mobil står billedet øverst og teksten under på den mørke flade */
+@media (max-width: 700px) {
+  .sidehoved--stablet { display: block; min-height: 0; }
+  .sidehoved--stablet .sidehoved__foto { position: relative; height: 52svh; min-height: 300px; }
+  .sidehoved--stablet::after { display: none; }
+  .sidehoved--stablet .sidehoved__tekst { padding-top: 24px; }
 }
 .sidehoved--enkel { min-height: 70vh; padding-top: calc(var(--top) + 64px); color: var(--tekst); background: var(--sand); }
 .sidehoved--enkel::after { display: none; }
@@ -652,7 +652,7 @@ h3 { font-weight: 500; }
 .kort__tal { fill: #0b111c; }
 
 /* Kontaktbåndet bliver et fotobånd */
-.cta { background: linear-gradient(180deg, rgba(6, 10, 18, .78), rgba(6, 10, 18, .92)), url(../img/soe-1800.webp) center 40% / cover; }
+.cta { background: linear-gradient(180deg, rgba(6, 10, 18, .78), rgba(6, 10, 18, .92)), url(../img/vand-2200.webp) center 55% / cover; }
 .cta h2 { font-size: clamp(2.6rem, 6vw, 5.4rem); }
 .cta__valg a { border-bottom-width: 1px; }
 .stribe { border-color: var(--linje); }
