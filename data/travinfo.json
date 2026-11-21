@@ -1,5 +1,5 @@
 {
- "opdateret": "2026-11-20T12:54:28.859Z",
+ "opdateret": "2026-11-21T12:41:00.701Z",
  "traener": {
   "foedt": 1993,
   "hjemmebane": "Spar Nord Arena Aalborg",
@@ -9,12 +9,12 @@
  "traenerStatistik": [
   {
    "aar": 2026,
-   "starter": 249,
-   "sejre": 36,
-   "toer": 34,
+   "starter": 252,
+   "sejre": 37,
+   "toer": 35,
    "treer": 32,
-   "procent": 14,
-   "praemier": 941744
+   "procent": 15,
+   "praemier": 956744
   },
   {
    "aar": 2025,
@@ -56,12 +56,12 @@
  "kuskStatistik": [
   {
    "aar": 2026,
-   "starter": 36,
+   "starter": 37,
    "sejre": 4,
-   "toer": 4,
+   "toer": 5,
    "treer": 3,
    "procent": 11,
-   "praemier": 108250
+   "praemier": 113250
   },
   {
    "aar": 2025,
@@ -152,9 +152,9 @@
    "far": "Fabulous Wood (FR)",
    "mor": "Spirit Of The Day (US)",
    "egetOpdraet": false,
-   "starter": 28,
-   "placeringer": "7-3-3",
-   "praemier": 122143,
+   "starter": 29,
+   "placeringer": "8-3-3",
+   "praemier": 132143,
    "rekord": "15,1m 17,2l 16,7ak *14,1am 15,4al"
   },
   {
@@ -376,9 +376,9 @@
    "far": "International Moni (US)",
    "mor": "Odette Vang",
    "egetOpdraet": true,
-   "starter": 8,
-   "placeringer": "2-3-0",
-   "praemier": 57000,
+   "starter": 9,
+   "placeringer": "2-4-0",
+   "praemier": 62000,
    "rekord": "18,7m 15,6ak 15,6am"
   },
   {
@@ -614,13 +614,49 @@
    "far": "Bold Eagle (FR)",
    "mor": "Lobell Countess (DE)",
    "egetOpdraet": false,
-   "starter": 33,
+   "starter": 34,
    "placeringer": "9-6-4",
    "praemier": 842049,
    "rekord": "14,8l 10,0ak *12,2am"
   }
  ],
  "resultater": [
+  {
+   "id": "838369-660298",
+   "dato": "2026-11-20",
+   "bane": "Od",
+   "loeb": 6,
+   "hestId": 660298,
+   "hest": "Yin Yang (DE)",
+   "placering": "d",
+   "tid": "g4",
+   "distance": 1660,
+   "praemie": 0
+  },
+  {
+   "id": "838366-658038",
+   "dato": "2026-11-20",
+   "bane": "Od",
+   "loeb": 4,
+   "hestId": 658038,
+   "hest": "Edz (SE)",
+   "placering": "1",
+   "tid": "14,8a",
+   "distance": 2140,
+   "praemie": 10000
+  },
+  {
+   "id": "838364-656325",
+   "dato": "2026-11-20",
+   "bane": "Od",
+   "loeb": 2,
+   "hestId": 656325,
+   "hest": "Mainz",
+   "placering": "2",
+   "tid": "15,8a",
+   "distance": 2140,
+   "praemie": 5000
+  },
   {
    "id": "838312-640436",
    "dato": "2026-11-18",
@@ -3767,30 +3803,6 @@
   }
  ],
  "kommende": [
-  {
-   "dato": "2026-11-20",
-   "bane": "Od",
-   "loeb": 2,
-   "hestId": 656325,
-   "hest": "Mainz",
-   "kusk": "Marc Bæk Nielsen"
-  },
-  {
-   "dato": "2026-11-20",
-   "bane": "Od",
-   "loeb": 4,
-   "hestId": 658038,
-   "hest": "Edz (SE)",
-   "kusk": "Jeppe Juel"
-  },
-  {
-   "dato": "2026-11-20",
-   "bane": "Od",
-   "loeb": 6,
-   "hestId": 660298,
-   "hest": "Yin Yang (DE)",
-   "kusk": "Jeppe Juel"
-  },
   {
    "dato": "2026-11-21",
    "bane": "År",
