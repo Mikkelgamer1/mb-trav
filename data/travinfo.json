@@ -1,5 +1,5 @@
 {
- "opdateret": "2026-11-21T12:41:00.701Z",
+ "opdateret": "2026-11-22T12:37:07.260Z",
  "traener": {
   "foedt": 1993,
   "hjemmebane": "Spar Nord Arena Aalborg",
@@ -9,12 +9,12 @@
  "traenerStatistik": [
   {
    "aar": 2026,
-   "starter": 252,
-   "sejre": 37,
+   "starter": 254,
+   "sejre": 38,
    "toer": 35,
-   "treer": 32,
+   "treer": 33,
    "procent": 15,
-   "praemier": 956744
+   "praemier": 965744
   },
   {
    "aar": 2025,
@@ -306,9 +306,9 @@
    "far": "Tobin Kronos (IT)",
    "mor": "Venus V",
    "egetOpdraet": false,
-   "starter": 11,
-   "placeringer": "0-2-2",
-   "praemier": 18650,
+   "starter": 12,
+   "placeringer": "0-2-3",
+   "praemier": 21650,
    "rekord": "20,7k 18,6m 17,6ak 16,6am"
   },
   {
@@ -348,10 +348,10 @@
    "far": "Ønas Prince (SE)",
    "mor": "Photo Fantasy U S (US)",
    "egetOpdraet": false,
-   "starter": 4,
-   "placeringer": "0-0-1",
-   "praemier": 5500,
-   "rekord": "17,7m 17,4am"
+   "starter": 5,
+   "placeringer": "1-0-1",
+   "praemier": 11500,
+   "rekord": "*19,3k 17,7m 17,4am"
   },
   {
    "id": 656369,
@@ -621,6 +621,30 @@
   }
  ],
  "resultater": [
+  {
+   "id": "838399-654220",
+   "dato": "2026-11-21",
+   "bane": "År",
+   "loeb": 6,
+   "hestId": 654220,
+   "hest": "Logan",
+   "placering": "3",
+   "tid": "18,5l",
+   "distance": 1800,
+   "praemie": 3000
+  },
+  {
+   "id": "838393-657068",
+   "dato": "2026-11-21",
+   "bane": "År",
+   "loeb": 1,
+   "hestId": 657068,
+   "hest": "Made By D C",
+   "placering": "1",
+   "tid": "19,3",
+   "distance": 1800,
+   "praemie": 6000
+  },
   {
    "id": "838369-660298",
    "dato": "2026-11-20",
@@ -3803,22 +3827,6 @@
   }
  ],
  "kommende": [
-  {
-   "dato": "2026-11-21",
-   "bane": "År",
-   "loeb": 1,
-   "hestId": 657068,
-   "hest": "Made By D C",
-   "kusk": "Jeppe Juel"
-  },
-  {
-   "dato": "2026-11-21",
-   "bane": "År",
-   "loeb": 6,
-   "hestId": 654220,
-   "hest": "Logan",
-   "kusk": "Jeppe Juel"
-  },
   {
    "dato": "2026-11-23",
    "bane": "Sk",
