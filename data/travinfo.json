@@ -1,5 +1,5 @@
 {
- "opdateret": "2026-11-23T14:40:28.046Z",
+ "opdateret": "2026-11-24T14:53:47.029Z",
  "traener": {
   "foedt": 1993,
   "hjemmebane": "Spar Nord Arena Aalborg",
@@ -9,12 +9,12 @@
  "traenerStatistik": [
   {
    "aar": 2026,
-   "starter": 254,
+   "starter": 256,
    "sejre": 38,
-   "toer": 35,
+   "toer": 36,
    "treer": 33,
    "procent": 15,
-   "praemier": 965744
+   "praemier": 968244
   },
   {
    "aar": 2025,
@@ -110,9 +110,9 @@
    "far": "Andover Hall (US)",
    "mor": "Sweet As Candy (SE)",
    "egetOpdraet": false,
-   "starter": 151,
-   "placeringer": "25-25-27",
-   "praemier": 669072,
+   "starter": 152,
+   "placeringer": "25-26-27",
+   "praemier": 671572,
    "rekord": "15,4k *15,0m *15,0l *14,5ak 13,4am 14,5al"
   },
   {
@@ -418,7 +418,7 @@
    "far": "Father Patrick (US)",
    "mor": "Beau Di Quattro (NL)",
    "egetOpdraet": false,
-   "starter": 66,
+   "starter": 67,
    "placeringer": "5-10-8",
    "praemier": 210899,
    "rekord": "17,6k *15,1m 22,2l 19,0ak 14,2am"
@@ -621,6 +621,30 @@
   }
  ],
  "resultater": [
+  {
+   "id": "838394-630741",
+   "dato": "2026-11-23",
+   "bane": "Sk",
+   "loeb": 7,
+   "hestId": 630741,
+   "hest": "Albatros",
+   "placering": "2",
+   "tid": "18,1",
+   "distance": 2000,
+   "praemie": 2500
+  },
+  {
+   "id": "838394-658824",
+   "dato": "2026-11-23",
+   "bane": "Sk",
+   "loeb": 7,
+   "hestId": 658824,
+   "hest": "Mauro Di Quattro (SE)",
+   "placering": "0",
+   "tid": "19,0",
+   "distance": 2000,
+   "praemie": 0
+  },
   {
    "id": "838399-654220",
    "dato": "2026-11-21",
@@ -3828,22 +3852,6 @@
  ],
  "kommende": [
   {
-   "dato": "2026-11-23",
-   "bane": "Sk",
-   "loeb": 7,
-   "hestId": 630741,
-   "hest": "Albatros",
-   "kusk": "Marie S. Andersen"
-  },
-  {
-   "dato": "2026-11-23",
-   "bane": "Sk",
-   "loeb": 7,
-   "hestId": 658824,
-   "hest": "Mauro Di Quattro (SE)",
-   "kusk": "Freja Steffensen"
-  },
-  {
    "dato": "2026-11-25",
    "bane": "Åb",
    "loeb": 2,
@@ -3858,6 +3866,38 @@
    "hestId": 657977,
    "hest": "Red Madonna (SE)",
    "kusk": "Jeppe Juel"
+  },
+  {
+   "dato": "2026-11-28",
+   "bane": "Ål",
+   "loeb": 3,
+   "hestId": 660298,
+   "hest": "Yin Yang (DE)",
+   "kusk": "Kasper K. Andersen"
+  },
+  {
+   "dato": "2026-11-28",
+   "bane": "Ål",
+   "loeb": 6,
+   "hestId": 651453,
+   "hest": "Karisma Gardenia",
+   "kusk": "Jeppe Juel"
+  },
+  {
+   "dato": "2026-11-30",
+   "bane": "Sk",
+   "loeb": 1,
+   "hestId": 656324,
+   "hest": "Make Me Dance",
+   "kusk": "Jeppe Juel"
+  },
+  {
+   "dato": "2026-11-30",
+   "bane": "Sk",
+   "loeb": 7,
+   "hestId": 651924,
+   "hest": "Kiki Sotto",
+   "kusk": "Marie S. Andersen"
   }
  ]
 }
