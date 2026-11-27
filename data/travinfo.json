@@ -1,5 +1,5 @@
 {
- "opdateret": "2026-11-26T13:55:08.075Z",
+ "opdateret": "2026-11-27T13:53:10.664Z",
  "traener": {
   "foedt": 1993,
   "hjemmebane": "Spar Nord Arena Aalborg",
@@ -9,12 +9,12 @@
  "traenerStatistik": [
   {
    "aar": 2026,
-   "starter": 256,
+   "starter": 258,
    "sejre": 38,
    "toer": 36,
    "treer": 33,
    "procent": 15,
-   "praemier": 968244
+   "praemier": 970982
   },
   {
    "aar": 2025,
@@ -23,7 +23,7 @@
    "toer": 43,
    "treer": 47,
    "procent": 14,
-   "praemier": 1033179
+   "praemier": 1033779
   },
   {
    "aar": 2024,
@@ -194,9 +194,9 @@
    "far": "Hayden Hanover (US)",
    "mor": "Radiant One (US)",
    "egetOpdraet": false,
-   "starter": 4,
+   "starter": 5,
    "placeringer": "2-1-1",
-   "praemier": 32528,
+   "praemier": 33555,
    "rekord": "*17,7m 17,1ak 14,4am"
   },
   {
@@ -252,7 +252,7 @@
    "egetOpdraet": false,
    "starter": 26,
    "placeringer": "4-4-1",
-   "praemier": 78250,
+   "praemier": 78850,
    "rekord": "17,1m 16,9ak *15,3am"
   },
   {
@@ -600,9 +600,9 @@
    "far": "Orlando Vici (FR)",
    "mor": "Return Ticket (SE)",
    "egetOpdraet": false,
-   "starter": 15,
+   "starter": 16,
    "placeringer": "3-4-5",
-   "praemier": 100107,
+   "praemier": 101818,
    "rekord": "15,6m *14,3am"
   },
   {
@@ -621,6 +621,30 @@
   }
  ],
  "resultater": [
+  {
+   "id": "838419-657977",
+   "dato": "2026-11-25",
+   "bane": "Åb",
+   "loeb": 3,
+   "hestId": 657977,
+   "hest": "Red Madonna (SE)",
+   "placering": "d",
+   "tid": "ga",
+   "distance": 2140,
+   "praemie": 1711
+  },
+  {
+   "id": "838418-658747",
+   "dato": "2026-11-25",
+   "bane": "Åb",
+   "loeb": 2,
+   "hestId": 658747,
+   "hest": "Fortheloveofmoney (SE)",
+   "placering": "0",
+   "tid": "17,4a",
+   "distance": 2140,
+   "praemie": 1027
+  },
   {
    "id": "838394-630741",
    "dato": "2026-11-23",
